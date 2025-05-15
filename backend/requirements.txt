@@ -1,0 +1,8 @@
+Flask
+Flask-SQLAlchemy
+pandas
+google-auth
+google-auth-oauthlib
+google-api-python-client
+werkzeug
+openpyxl
