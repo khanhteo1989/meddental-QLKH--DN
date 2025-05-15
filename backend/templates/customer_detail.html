@@ -6,49 +6,105 @@
     <title>Customer Details - {{ customer.name }}</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" />
     <style>
-     body {
-            background-color: #f4f6f9;
+        body {
+            background-color: #2e2543;
+            color: #e8dff5;
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
         }
         .container {
             max-width: 1200px;
+            margin: 0 auto;
+            background: #3a2f55cc;
+            border-radius: 18px;
+            padding: 30px;
+            box-shadow: 0 0 30px #9377c2aa;
         }
         .header-title {
-            font-size: 2.5rem;
-            font-weight: bold;
-            color: #004085;
-            margin-top: 20px;
+            font-size: 2.4rem;
+            font-weight: 800;
+            color: #c2b7ea;
+            text-shadow: 0 0 8px #a99ff3;
+            margin-bottom: 28px;
+            letter-spacing: 1.2px;
         }
         .card {
-            background-color: #ffffff;
-            border-radius: 10px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            background-color: #4b3f7d;
+            border-radius: 18px;
+            box-shadow: 0 0 25px #8e7ed7cc;
             margin-bottom: 20px;
-            padding: 20px;
+            padding: 25px 30px;
+            color: #dcd6f2;
         }
         .form-group label {
-            font-weight: bold;
+            font-weight: 700;
+            color: #b8aee6;
+            margin-bottom: 8px;
+            text-shadow: 0 0 6px #b0a8dfaa;
         }
         .info-field {
             font-size: 1.1rem;
-            color: #333;
-            background-color: #f8f9fa;
-            border: 1px solid #ddd;
-            padding: 10px;
-            border-radius: 5px;
+            background-color: #5a4e7a;
+            border: 1px solid #7e6bc1;
+            padding: 12px 15px;
+            border-radius: 14px;
+            color: #dcd6f2;
+            box-shadow: inset 0 0 12px #a49ee0aa;
         }
-        .btn-custom {
-            background-color: #007bff;
-            color: white;
+        .btn-custom, .btn-warning, .btn-danger, .btn-secondary {
+            border-radius: 18px;
+            padding: 12px 30px;
+            font-weight: 700;
+            box-shadow: 0 0 18px #a898e1cc;
+            transition: background-color 0.3s ease, color 0.3s ease;
         }
-        .btn-back {
-            background-color: #6c757d;
-            color: white;
+        .btn-warning {
+            background-color: #7f6cc9;
+            color: #f5f2ff;
+            border: none;
+            box-shadow: 0 0 16px #9b8ae6cc;
+        }
+        .btn-warning:hover {
+            background-color: #a798e5;
+            color: #3e3a56;
+            box-shadow: 0 0 22px #a998e5ff;
+        }
+        .btn-danger {
+            background-color: #bb667b;
+            color: #f8e6ea;
+            border: none;
+            box-shadow: 0 0 14px #c48da1cc;
+        }
+        .btn-danger:hover {
+            background-color: #d98ba3;
+            color: #422d39;
+            box-shadow: 0 0 18px #d8a0b1ff;
+        }
+        .btn-secondary {
+            background-color: #6c5f8b;
+            color: #e6e0f1;
+            border: none;
+            box-shadow: 0 0 14px #8b81b0cc;
+        }
+        .btn-secondary:hover {
+            background-color: #8b83b8;
+            color: #3c3953;
+            box-shadow: 0 0 18px #9d98cbff;
         }
         .btn-group {
-            margin-top: 20px;
+            margin-top: 25px;
         }
-        .info-card {
-            margin-top: 30px;
+        ul {
+            padding-left: 20px;
+            margin-bottom: 0;
+        }
+        li {
+            margin-bottom: 6px;
+            font-weight: 600;
+            color: #c4bbec;
+            text-shadow: 0 0 3px #a29ddbbb;
         }
     </style>
 </head>
@@ -129,5 +185,3 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>
-
- 
