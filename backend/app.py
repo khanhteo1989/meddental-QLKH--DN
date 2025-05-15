@@ -4,41 +4,7 @@ from werkzeug.utils import secure_filename
 import os
 import pandas as pd
 import random
-import pickle
 from datetime import datetime
-from google_auth_oauthlib.flow import InstalledAppFlow
-from googleapiclient.discovery import build
-from google.auth.transport.requests import Request
-from googleapiclient.http import MediaFileUpload
-
-# Phạm vi quyền truy cập Google Drive
-SCOPES = ['https://www.googleapis.com/auth/drive.file']
-
-def authenticate_google_account():
-    creds = None
-    if os.path.exists('token.pickle'):
-        with open('token.pickle', 'rb') as token:
-            creds = pickle.load(token)
-    if not creds or not creds.valid:
-        if creds and creds.expired and creds.refresh_token:
-            creds.refresh(Request())
-        else:
-            flow = InstalledAppFlow.from_client_secrets_file('credentials.json', SCOPES)
-            creds = flow.run_local_server(port=5000)
-        with open('token.pickle', 'wb') as token:
-            pickle.dump(creds, token)
-    return build('drive', 'v3', credentials=creds)
-
-def save_form_data_to_drive(form_data):
-    service = authenticate_google_account()
-    file_name = f"{form_data['name']}_form_data.txt"
-    file_metadata = {'name': file_name, 'mimeType': 'text/plain'}
-    with open(file_name, 'w') as f:
-        f.write(str(form_data))
-    media = MediaFileUpload(file_name, mimetype='text/plain')
-    file = service.files().create(body=file_metadata, media_body=media, fields='id').execute()
-    print(f"File ID: {file['id']}")
-    os.remove(file_name)
 
 CV_CODES = [
     "CV01 - KHÁNH", "CV02 - X.Thủy", "CV03 - Ngọc Anh", "CV04 - Nhật Linh",
@@ -78,10 +44,8 @@ with app.app_context():
 def index():
     page = request.args.get('page', 1, type=int)
     customers = Customer.query.paginate(page=page, per_page=20, error_out=False)
-    return render_template('index.html', customers=customers, cv_codes=CV_CODES)
-
-def generate_cccd():
-    return "DN-" + str(random.randint(1000000000, 9999999999))
+    # Truyền thêm datetime vào template để tính 24h khóa xóa
+    return render_template('index.html', customers=customers, cv_codes=CV_CODES, datetime=datetime)
 
 @app.route('/add_customer', methods=['POST'])
 def add_customer():
@@ -96,7 +60,6 @@ def add_customer():
         'program': request.form['program'],
         'notes': request.form['notes']
     }
-    save_form_data_to_drive(form_data)
 
     new_customer = Customer(
         name=form_data['name'],
@@ -135,19 +98,6 @@ def edit_customer(customer_id):
         customer.appointment_schedules = ",".join(request.form.getlist('appointment_schedule'))
         customer.revenues = ",".join(request.form.getlist('revenue'))
 
-        form_data = {
-            'name': customer.name,
-            'phone': customer.phone,
-            'address': customer.address,
-            'dob': customer.dob,
-            'cccd': customer.cccd,
-            'role': customer.role,
-            'status': customer.status,
-            'program': customer.program,
-            'notes': customer.notes
-        }
-        save_form_data_to_drive(form_data)
-
         db.session.commit()
         return redirect(url_for('index'))
 
@@ -170,6 +120,13 @@ def view_customer(customer_id):
 @app.route('/delete_customer/<int:customer_id>')
 def delete_customer(customer_id):
     customer = Customer.query.get_or_404(customer_id)
+    # Kiểm tra xem đã hơn 24h chưa trước khi xóa
+    from datetime import datetime, timedelta
+    now = datetime.utcnow()
+    if (now - customer.date_added) > timedelta(hours=24):
+        # Đã quá 24h, không cho xóa, redirect về index với thông báo (nếu muốn)
+        return redirect(url_for('index'))
+    # Nếu chưa quá 24h thì xóa bình thường
     db.session.delete(customer)
     db.session.commit()
     return redirect(url_for('index'))
@@ -213,5 +170,5 @@ def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in app.config['ALLOWED_EXTENSIONS']
 
 if __name__ == '__main__':
-    port = int(os.environ.get('PORT', 5000))
+    port = int(os.environ.get('PORT', 5001))
     app.run(host='0.0.0.0', port=port, debug=True)
