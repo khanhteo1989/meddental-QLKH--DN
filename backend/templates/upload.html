@@ -5,21 +5,138 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Upload Excel File</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" />
+    <style>
+        body {
+            background: linear-gradient(135deg, #3a2f55, #5a4e7a);
+            color: #dcd6f2;
+            font-family: 'Inter', sans-serif;
+            min-height: 100vh;
+            padding: 30px 0;
+        }
+        .container {
+            max-width: 900px;
+            background-color: #4b3f7dcc;
+            padding: 30px 40px;
+            border-radius: 25px;
+            box-shadow: 0 0 30px #8e7ed7cc;
+            margin: auto;
+        }
+        h1 {
+            font-weight: 900;
+            font-size: 2.8rem;
+            color: #c2b7ea;
+            text-shadow: 0 0 8px #a99ff3;
+            margin-bottom: 30px;
+            text-align: center;
+            letter-spacing: 1.3px;
+        }
+        label {
+            font-weight: 700;
+            color: #b8aee6;
+            text-shadow: 0 0 6px #b0a8dfaa;
+        }
+        input[type="file"] {
+            border-radius: 15px;
+            border: 2px solid #7e6bc1;
+            background-color: #5a4e7a;
+            color: #dcd6f2;
+            padding: 10px 12px;
+            font-weight: 700;
+            box-shadow: inset 0 0 10px #a49ee0aa;
+            transition: border-color 0.3s ease;
+            width: 100%;
+        }
+        input[type="file"]:focus {
+            border-color: #a798e5;
+            outline: none;
+            box-shadow: 0 0 15px #a998e5ff;
+            background-color: #6b5da3;
+        }
+        button.btn-primary {
+            background-color: #7f6cc9;
+            border: none;
+            font-weight: 900;
+            border-radius: 25px;
+            padding: 12px 35px;
+            font-size: 1.1rem;
+            box-shadow: 0 0 18px #9b8ae6cc;
+            transition: background-color 0.3s ease;
+            color: #f5f2ff;
+            display: block;
+            margin: 25px auto 0;
+            cursor: pointer;
+        }
+        button.btn-primary:hover {
+            background-color: #a798e5;
+            color: #3e3a56;
+            box-shadow: 0 0 22px #a998e5ff;
+        }
+        table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0 12px;
+            background: #3a2f55;
+            color: #dcd6f2;
+            border-radius: 20px;
+            box-shadow: 0 0 25px #7e6bc1aa;
+            font-weight: 600;
+            font-size: 1rem;
+            margin-top: 40px;
+        }
+        thead tr {
+            background: #7f6cc9;
+            color: #f5f2ff;
+            font-weight: 700;
+            font-size: 1.05rem;
+            letter-spacing: 0.5px;
+            border-radius: 20px;
+        }
+        tbody tr {
+            transition: background-color 0.3s ease;
+            cursor: default;
+        }
+        tbody tr:hover {
+            background-color: #8e7ed7cc;
+            color: #3e3a56;
+        }
+        tbody tr td {
+            padding: 14px 18px;
+            border-bottom: 1px solid #9b8ae6aa;
+        }
+        .btn-back {
+            display: inline-block;
+            margin-top: 30px;
+            background-color: #7f6cc9;
+            color: #f5f2ff;
+            font-weight: 900;
+            padding: 12px 30px;
+            border-radius: 25px;
+            text-decoration: none;
+            box-shadow: 0 0 20px #9b8ae6cc;
+            transition: background-color 0.3s ease;
+            user-select: none;
+        }
+        .btn-back:hover {
+            background-color: #a798e5;
+            color: #3e3a56;
+            box-shadow: 0 0 30px #a998e5ff;
+        }
+    </style>
 </head>
 <body>
     <div class="container">
-        <h1 class="my-4">Upload Excel File</h1>
+        <h1>Upload Excel File</h1>
         <form action="{{ url_for('upload_file') }}" method="POST" enctype="multipart/form-data">
             <div class="form-group">
                 <label for="file">Choose Excel File</label>
-                <input type="file" class="form-control" id="file" name="file" required />
+                <input type="file" id="file" name="file" required />
             </div>
             <button type="submit" class="btn btn-primary">Upload</button>
         </form>
 
         {% if customers %}
-            <h2 class="mt-4">Uploaded Customer Data:</h2>
-            <table class="table table-bordered">
+            <h2 class="mt-5 text-center">Uploaded Customer Data</h2>
+            <table>
                 <thead>
                     <tr>
                         <th>Họ Tên</th>
@@ -31,29 +148,27 @@
                         <th>Tình Trạng</th>
                         <th>CT Áp Dụng</th>
                         <th>Ghi Chú</th>
-                        <th>Lộ Trình Chữa Bệnh</th>
                     </tr>
                 </thead>
                 <tbody>
                     {% for customer in customers %}
-                        <tr>
-                            <td>{{ customer.name }}</td>
-                            <td>{{ customer.address }}</td>
-                            <td>{{ customer.phone }}</td>
-                            <td>{{ customer.cccd }}</td>
-                            <td>{{ customer.dob }}</td>
-                            <td>{{ customer.role }}</td>
-                            <td>{{ customer.status }}</td>
-                            <td>{{ customer.program }}</td>
-                            <td>{{ customer.notes }}</td>
-                            <td>{{ customer.treatment_plans }}</td>
-                        </tr>
+                    <tr>
+                        <td>{{ customer.name }}</td>
+                        <td>{{ customer.address }}</td>
+                        <td>{{ customer.phone }}</td>
+                        <td>{{ customer.cccd }}</td>
+                        <td>{{ customer.dob }}</td>
+                        <td>{{ customer.role }}</td>
+                        <td>{{ customer.status }}</td>
+                        <td>{{ customer.program }}</td>
+                        <td>{{ customer.notes }}</td>
+                    </tr>
                     {% endfor %}
                 </tbody>
             </table>
-
-            <a href="{{ url_for('index') }}" class="btn btn-secondary mt-3">Quay về trang chính</a>
         {% endif %}
+
+        <a href="{{ url_for('index') }}" class="btn-back">Back to Customer List</a>
     </div>
 
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
