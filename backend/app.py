@@ -5,6 +5,7 @@ import os
 import pandas as pd
 import random
 import pickle
+from datetime import datetime
 from google_auth_oauthlib.flow import InstalledAppFlow
 from googleapiclient.discovery import build
 from google.auth.transport.requests import Request
@@ -65,7 +66,6 @@ class Customer(db.Model):
     status = db.Column(db.String(100), nullable=False)
     program = db.Column(db.String(100), nullable=False)
     notes = db.Column(db.String(200), nullable=True)
-
     date_added = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
     treatment_plans = db.Column(db.String(500), nullable=True)
     appointment_schedules = db.Column(db.String(500), nullable=True)
@@ -211,11 +211,7 @@ def upload_file():
 
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in app.config['ALLOWED_EXTENSIONS']
-  
- if __name__ == '__main__':
+
+if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
     app.run(host='0.0.0.0', port=port, debug=True)
-
-
-
-
