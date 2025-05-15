@@ -1,188 +1,264 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Tiến Trình Chữa Bệnh - {{ customer.name }}</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" />
     <style>
         body {
-            background-color: #f4f6f9;
+            background-color: #2e2543;
+            color: #e8dff5;
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
         }
         .container {
             max-width: 1200px;
+            margin: 0 auto;
+            background: #3a2f55cc;
+            border-radius: 18px;
             padding: 30px;
+            box-shadow: 0 0 30px #9377c2aa;
         }
         .header-title {
-            font-size: 2.5rem;
-            font-weight: bold;
-            color: #004085;
-            margin-bottom: 20px;
+            font-size: 2.4rem;
+            font-weight: 800;
+            color: #c2b7ea;
+            text-shadow: 0 0 8px #a99ff3;
+            margin-bottom: 28px;
+            letter-spacing: 1.2px;
+        }
+        form {
+            width: 100%;
         }
         .form-row {
-            margin-bottom: 15px;
+            margin-bottom: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
         }
-        .btn-custom {
-            background-color: #007bff;
-            color: white;
+        .form-group {
+            flex: 1 1 30%;
+            display: flex;
+            flex-direction: column;
         }
-        .form-control {
-            border-radius: 5px;
-            padding: 10px;
+        label {
+            font-weight: 700;
+            color: #8b7bc4;
+            margin-bottom: 6px;
+            text-shadow: 0 0 4px #a898e1bb;
         }
-        .form-group label {
-            font-weight: bold;
+        input.form-control,
+        select.form-control,
+        textarea.form-control {
+            border-radius: 14px;
+            padding: 12px 14px;
+            border: 2px solid #7e6bc1;
+            font-size: 1rem;
+            font-weight: 600;
+            color: #392f5d;
+            background-color: #dcd6f2cc;
+            box-shadow: inset 0 0 8px #a898e1aa;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+            resize: vertical;
         }
-        .form-group .form-control {
-            margin-bottom: 10px;
+        input.form-control:focus,
+        select.form-control:focus,
+        textarea.form-control:focus {
+            border-color: #a59ce1;
+            outline: none;
+            box-shadow: 0 0 10px #b3acefff;
+            background-color: #eeeafb;
+            color: #4b4070;
         }
         .readonly-input {
-            background-color: #e9ecef;
-            border-color: #ccc;
+            background-color: #5a4e7a;
+            border-color: #7f6cc9;
+            color: #d9d4f7;
             pointer-events: none;
+            box-shadow: none;
         }
-        .btn-remove {
-            background-color: red;
-            color: white;
-            margin-top: 5px;
-        }
-        .btn-add {
-            background-color: #28a745;
-            color: white;
-        }
-        .form-group .form-control,
-        .form-row .form-group {
-            margin-top: 15px;
+        textarea.form-control {
+            min-height: 90px;
         }
         .section-header {
-            background-color: #f8f9fa;
-            padding: 10px;
-            margin-top: 20px;
-            border-radius: 8px;
+            background-color: #4b3f7d;
+            padding: 14px 20px;
+            border-radius: 18px;
+            margin-top: 30px;
+            margin-bottom: 20px;
+            color: #c2b7ea;
+            font-weight: 700;
+            box-shadow: 0 0 18px #a89defcc;
+            letter-spacing: 1.2px;
+            text-shadow: 0 0 6px #8778b7;
+        }
+        .btn-custom {
+            background-color: #7f6cc9;
+            color: #f5f2ff;
+            font-weight: 800;
+            border: none;
+            border-radius: 18px;
+            padding: 14px 38px;
+            cursor: pointer;
+            font-size: 1.15rem;
+            transition: background-color 0.3s ease;
+            box-shadow: 0 0 16px #9b8ae6cc;
+            margin-top: 24px;
+            text-transform: uppercase;
+        }
+        .btn-custom:hover {
+            background-color: #a798e5;
+            color: #3e3a56;
+            box-shadow: 0 0 22px #a998e5ff;
+        }
+        .btn-add {
+            background-color: #a798e5;
+            color: #3e3a56;
+            font-weight: 700;
+            border: none;
+            border-radius: 18px;
+            padding: 10px 28px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            box-shadow: 0 0 14px #a798e5cc;
+            margin-bottom: 28px;
+        }
+        .btn-add:hover {
+            background-color: #b6a7f5;
+            color: #312e48;
+        }
+        .btn-secondary {
+            margin-left: 16px;
+            border-radius: 18px;
+            padding: 12px 28px;
+            font-weight: 600;
+            box-shadow: 0 0 14px #a798e5cc;
         }
     </style>
 </head>
 <body>
     <div class="container mt-4">
         <h1 class="header-title">Tiến Trình Chữa Bệnh - <strong>{{ customer.name }}</strong></h1>
-        
+        <form action="{{ url_for('edit_customer', customer_id=customer.id) }}" method="POST">
 
-        
-        <!-- Edit Customer Form -->
-       <form action="{{ url_for('edit_customer', customer_id=customer.id) }}" method="POST">
-    <div class="form-row">
-        <div class="form-group col-md-4">
-            <label for="name">Họ Tên</label>
-            <input type="text" id="name" name="name" class="form-control readonly-input" value="{{ customer.name }}" readonly>
-        </div>
-        <div class="form-group col-md-4">
-            <label for="phone">SĐT</label>
-            <input type="text" id="phone" name="phone" class="form-control readonly-input" value="{{ customer.phone }}" readonly>
-        </div>
-        <div class="form-group col-md-4">
-            <label for="address">Địa Chỉ</label>
-            <input type="text" id="address" name="address" class="form-control readonly-input" value="{{ customer.address }}" readonly>
-        </div>
-    </div>
-
-    <div class="form-row">
-        <div class="form-group col-md-4">
-            <label for="dob">Ngày Sinh</label>
-            <input type="text" id="dob" name="dob" class="form-control readonly-input" value="{{ customer.dob }}" readonly>
-        </div>
-        <div class="form-group col-md-4">
-            <label for="cccd">Mã NV, CCCD</label>
-            <input type="text" id="cccd" name="cccd" class="form-control readonly-input" value="{{ customer.cccd }}" readonly>
-        </div>
-        <div class="form-group col-md-4">
-            <label for="role">Gắn mã CV</label>
-            <input type="text" id="role" name="role" class="form-control readonly-input" value="{{ customer.role }}" readonly>
-        </div>
-    </div>
-
-    <div class="form-row">
-        <div class="form-group col-md-4">
-            <label for="status">Tình Trạng</label>
-            <input type="text" id="status" name="status" class="form-control" value="{{ customer.status }}" required>
-        </div>
-        <div class="form-group col-md-4">
-            <label for="program">CT Áp Dụng</label>
-            <input type="text" id="program" name="program" class="form-control" value="{{ customer.program }}" required>
-        </div>
-        <div class="form-group col-md-4">
-            <label for="notes">Ghi Chú</label>
-            <textarea id="notes" name="notes" class="form-control">{{ customer.notes }}</textarea>
-        </div>
-    </div>
-
-    <!-- Section for Treatment Plans, Appointment Schedules -->
-    <div class="section-header">
-        <h4>Thêm Lộ Trình Chữa Bệnh, Lịch Hẹn</h4>
-    </div>
-    <div id="treatment_plan_section">
-        {% for i in range(treatment_plans|length) %}
-        <div class="form-row treatment-item">
-            <div class="form-group col-md-4">
-                <label for="treatment_plan_{{ i }}">Lộ Trình Chữa Bệnh</label>
-                <select id="treatment_plan_{{ i }}" name="treatment_plan" class="form-control" required>
-                    <option value="Chỉnh nha" {% if treatment_plans[i] == 'Chỉnh nha' %}selected{% endif %}>Chỉnh nha</option>
-                    <option value="Tổng quát" {% if treatment_plans[i] == 'Tổng quát' %}selected{% endif %}>Tổng quát</option>
-                    <option value="Trồng Implant" {% if treatment_plans[i] == 'Trồng Implant' %}selected{% endif %}>Trồng Implant</option>
-                    <option value="Nhổ răng" {% if treatment_plans[i] == 'Nhổ răng' %}selected{% endif %}>Nhổ răng</option>
-                    <option value="Răng sứ thẩm mỹ" {% if treatment_plans[i] == 'Răng sứ thẩm mỹ' %}selected{% endif %}>Răng sứ thẩm mỹ</option>
-                </select>
-            </div>
-            <div class="form-group col-md-4">
-                <label for="appointment_schedule_{{ i }}">Lịch Đặt Hẹn</label>
-                <input type="date" id="appointment_schedule_{{ i }}" name="appointment_schedule" class="form-control" value="{{ appointment_schedules[i] }}"/>
-            </div>
-            <div class="form-group col-md-12">
-                <input type="checkbox" id="cancel_{{ i }}" name="cancel_{{ i }}">
-                <label for="cancel_{{ i }}">Hủy Lộ Trình này</label>
-            </div>
-        </div>
-        {% endfor %}
-    </div>
-
-    <button type="button" class="btn btn-add" id="add_treatment_plan">Thêm Mới Lộ Trình</button>
-
-    <div class="form-group mt-4">
-        <label for="date_added">Ngày Nhập</label>
-        <input type="text" id="date_added" name="date_added" class="form-control readonly-input" value="{{ customer.date_added }}" readonly>
-    </div>
-
-    <button type="submit" class="btn btn-custom">Lưu Thay Đổi</button>
-    <a href="{{ url_for('index') }}" class="btn btn-secondary ml-2">Quay lại danh sách khách hàng</a>
-</form>
-
-<script>
-    document.getElementById('add_treatment_plan').addEventListener('click', function() {
-        const treatmentSection = document.getElementById('treatment_plan_section');
-        const newIndex = treatmentSection.children.length;
-
-        const newTreatmentHTML = `
-            <div class="form-row treatment-item">
+            <div class="form-row">
                 <div class="form-group col-md-4">
-                    <label for="treatment_plan_${newIndex}">Lộ Trình Chữa Bệnh</label>
-                    <select id="treatment_plan_${newIndex}" name="treatment_plan" class="form-control" required>
-                        <option value="Chỉnh nha">Chỉnh nha</option>
-                        <option value="Tổng quát">Tổng quát</option>
-                        <option value="Trồng Implant">Trồng Implant</option>
-                        <option value="Nhổ răng">Nhổ răng</option>
-                        <option value="Răng sứ thẩm mỹ">Răng sứ thẩm mỹ</option>
-                    </select>
+                    <label for="name">Họ Tên</label>
+                    <input type="text" id="name" name="name" class="form-control readonly-input" value="{{ customer.name }}" readonly>
                 </div>
                 <div class="form-group col-md-4">
-                    <label for="appointment_schedule_${newIndex}">Lịch Đặt Hẹn</label>
-                    <input type="date" id="appointment_schedule_${newIndex}" name="appointment_schedule" class="form-control">
+                    <label for="phone">SĐT</label>
+                    <input type="text" id="phone" name="phone" class="form-control readonly-input" value="{{ customer.phone }}" readonly>
                 </div>
-                <div class="form-group col-md-12">
-                    <input type="checkbox" id="cancel_${newIndex}" name="cancel_${newIndex}">
-                    <label for="cancel_${newIndex}">Hủy Lộ Trình này</label>
+                <div class="form-group col-md-4">
+                    <label for="address">Địa Chỉ</label>
+                    <input type="text" id="address" name="address" class="form-control readonly-input" value="{{ customer.address }}" readonly>
                 </div>
             </div>
-        `;
-        treatmentSection.insertAdjacentHTML('beforeend', newTreatmentHTML);
-    });
-</script>
 
+            <div class="form-row">
+                <div class="form-group col-md-4">
+                    <label for="dob">Ngày Sinh</label>
+                    <input type="text" id="dob" name="dob" class="form-control readonly-input" value="{{ customer.dob }}" readonly>
+                </div>
+                <div class="form-group col-md-4">
+                    <label for="cccd">Mã NV, CCCD</label>
+                    <input type="text" id="cccd" name="cccd" class="form-control readonly-input" value="{{ customer.cccd }}" readonly>
+                </div>
+                <div class="form-group col-md-4">
+                    <label for="role">Gắn mã CV</label>
+                    <input type="text" id="role" name="role" class="form-control readonly-input" value="{{ customer.role }}" readonly>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group col-md-4">
+                    <label for="status">Tình Trạng</label>
+                    <input type="text" id="status" name="status" class="form-control" value="{{ customer.status }}" required>
+                </div>
+                <div class="form-group col-md-4">
+                    <label for="program">CT Áp Dụng</label>
+                    <input type="text" id="program" name="program" class="form-control" value="{{ customer.program }}" required>
+                </div>
+                <div class="form-group col-md-4">
+                    <label for="notes">Ghi Chú</label>
+                    <textarea id="notes" name="notes" class="form-control">{{ customer.notes }}</textarea>
+                </div>
+            </div>
+
+            <div class="section-header">
+                <h4>Thêm Lộ Trình Chữa Bệnh, Lịch Hẹn</h4>
+            </div>
+
+            <div id="treatment_plan_section">
+                {% for i in range(treatment_plans|length) %}
+                <div class="form-row treatment-item">
+                    <div class="form-group col-md-4">
+                        <label for="treatment_plan_{{ i }}">Lộ Trình Chữa Bệnh</label>
+                        <select id="treatment_plan_{{ i }}" name="treatment_plan" class="form-control" required>
+                            <option value="Chỉnh nha" {% if treatment_plans[i] == 'Chỉnh nha' %}selected{% endif %}>Chỉnh nha</option>
+                            <option value="Tổng quát" {% if treatment_plans[i] == 'Tổng quát' %}selected{% endif %}>Tổng quát</option>
+                            <option value="Trồng Implant" {% if treatment_plans[i] == 'Trồng Implant' %}selected{% endif %}>Trồng Implant</option>
+                            <option value="Nhổ răng" {% if treatment_plans[i] == 'Nhổ răng' %}selected{% endif %}>Nhổ răng</option>
+                            <option value="Răng sứ thẩm mỹ" {% if treatment_plans[i] == 'Răng sứ thẩm mỹ' %}selected{% endif %}>Răng sứ thẩm mỹ</option>
+                        </select>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label for="appointment_schedule_{{ i }}">Lịch Đặt Hẹn</label>
+                        <input type="date" id="appointment_schedule_{{ i }}" name="appointment_schedule" class="form-control" value="{{ appointment_schedules[i] }}"/>
+                    </div>
+                    <div class="form-group col-md-12">
+                        <input type="checkbox" id="cancel_{{ i }}" name="cancel_{{ i }}">
+                        <label for="cancel_{{ i }}">Hủy Lộ Trình này</label>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+
+            <button type="button" class="btn btn-add" id="add_treatment_plan">Thêm Mới Lộ Trình</button>
+
+            <div class="form-group mt-4">
+                <label for="date_added">Ngày Nhập</label>
+                <input type="text" id="date_added" name="date_added" class="form-control readonly-input" value="{{ customer.date_added }}" readonly>
+            </div>
+
+            <button type="submit" class="btn btn-custom">Lưu Thay Đổi</button>
+            <a href="{{ url_for('index') }}" class="btn btn-secondary ml-2">Quay lại danh sách khách hàng</a>
+        </form>
+    </div>
+
+    <script>
+        document.getElementById('add_treatment_plan').addEventListener('click', function() {
+            const treatmentSection = document.getElementById('treatment_plan_section');
+            const newIndex = treatmentSection.children.length;
+
+            const newTreatmentHTML = `
+                <div class="form-row treatment-item">
+                    <div class="form-group col-md-4">
+                        <label for="treatment_plan_${newIndex}">Lộ Trình Chữa Bệnh</label>
+                        <select id="treatment_plan_${newIndex}" name="treatment_plan" class="form-control" required>
+                            <option value="Chỉnh nha">Chỉnh nha</option>
+                            <option value="Tổng quát">Tổng quát</option>
+                            <option value="Trồng Implant">Trồng Implant</option>
+                            <option value="Nhổ răng">Nhổ răng</option>
+                            <option value="Răng sứ thẩm mỹ">Răng sứ thẩm mỹ</option>
+                        </select>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label for="appointment_schedule_${newIndex}">Lịch Đặt Hẹn</label>
+                        <input type="date" id="appointment_schedule_${newIndex}" name="appointment_schedule" class="form-control">
+                    </div>
+                    <div class="form-group col-md-12">
+                        <input type="checkbox" id="cancel_${newIndex}" name="cancel_${newIndex}">
+                        <label for="cancel_${newIndex}">Hủy Lộ Trình này</label>
+                    </div>
+                </div>
+            `;
+            treatmentSection.insertAdjacentHTML('beforeend', newTreatmentHTML);
+        });
+    </script>
+</body>
+</html>
