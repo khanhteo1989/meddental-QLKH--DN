@@ -65,7 +65,8 @@ class Customer(db.Model):
     status = db.Column(db.String(100), nullable=False)
     program = db.Column(db.String(100), nullable=False)
     notes = db.Column(db.String(200), nullable=True)
-    date_added = db.Column(db.DateTime, nullable=False, default=pd.to_datetime("now"))
+    date_added = db.Column(db.DateTime, nullable=False, default=pd.to_datetime("now", utc=True))
+
     treatment_plans = db.Column(db.String(500), nullable=True)
     appointment_schedules = db.Column(db.String(500), nullable=True)
     revenues = db.Column(db.String(500), nullable=True)
