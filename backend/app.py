@@ -65,7 +65,7 @@ class Customer(db.Model):
     status = db.Column(db.String(100), nullable=False)
     program = db.Column(db.String(100), nullable=False)
     notes = db.Column(db.String(200), nullable=True)
-    from datetime import datetime
+    class Customer(db.Model):   
     date_added = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
     treatment_plans = db.Column(db.String(500), nullable=True)
     appointment_schedules = db.Column(db.String(500), nullable=True)
