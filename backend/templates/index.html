@@ -1,214 +1,513 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quản Lý Khách Hàng - Khách Hàng Doanh Nghiệp - P.QHĐT</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Quản Lý Khách Hàng - P.QHĐT</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
     <style>
         body {
-            background-color: #f4f6f9;
+            background: #2e2543; /* tím trầm, dịu mắt */
+            color: #e8dff5; /* tím pastel nhạt */
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
         }
         .container {
             max-width: 1200px;
-        }
-        .header-title {
-            font-size: 2.5rem;
-            font-weight: bold;
-            color: #004085;
-            margin-top: 20px;
+            margin: 0 auto;
+            background: #3a2f55cc; /* nền tím nhạt trong suốt */
+            border-radius: 18px;
+            padding: 30px;
+            box-shadow: 0 0 30px #9377c2aa; /* bóng tím dịu */
         }
         .banner {
-            background: rgba(65, 81, 136, 0.7); 
-            padding: 20px;
-            text-align: center;
-            color: rgb(238, 232, 232);
-            position: relative;
+            background: #4b3f7d;
+            padding: 22px 20px;
+            border-radius: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 18px;
+            margin-bottom: 38px;
+            box-shadow: 0 0 20px #a899d1;
         }
         .banner img {
-            width: 150px;
-            margin-right: 20px;
+            width: 120px;
+            border-radius: 18px;
+            box-shadow: 0 0 20px #a899d1;
         }
         .banner h1 {
-            font-size: 3rem;
+            font-size: 2.6rem;
+            font-weight: 800;
+            color: #c2b7ea;
+            margin: 0;
+            text-shadow: 0 0 8px #a99ff3;
+            letter-spacing: 1.5px;
         }
-        .card {
-            background-color: #ffffff;
-            border-radius: 10px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            margin-bottom: 20px;
+        form.card {
+            background-color: #9e8bcccc; /* tím nhẹ */
+            color: #3e2f5a;
+            border-radius: 22px;
+            padding: 28px 25px;
+            box-shadow: 0 8px 28px #8775b3bb;
+            margin-bottom: 38px;
+            transition: box-shadow 0.3s ease;
         }
-        .btn-upload {
-            background-color: #17a2b8;
-            color: white;
-            font-weight: bold;
+        form.card:hover {
+            box-shadow: 0 12px 35px #b1a1e0dd;
+        }
+        form.card h3 {
+            margin-bottom: 24px;
+            font-weight: 900;
+            color: #5b4a93;
+            text-shadow: 0 0 6px #8678b7;
+        }
+        .form-row {
+            display: flex;
+            gap: 18px;
+            flex-wrap: wrap;
+        }
+        .form-group {
+            flex: 1 1 30%;
+            display: flex;
+            flex-direction: column;
+        }
+        .form-group label {
+            margin-bottom: 6px;
+            font-weight: 700;
+            color: #5b4a93;
+            text-shadow: 0 0 4px #8778b3bb;
+        }
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            padding: 12px 14px;
+            border-radius: 14px;
+            border: 2px solid #7e6bc1;
+            font-size: 1.05rem;
+            transition: border-color 0.3s ease;
+            resize: vertical;
+            font-weight: 600;
+            color: #392f5d;
+            background-color: #dcd6f2cc;
+            box-shadow: inset 0 0 8px #a898e1aa;
+        }
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            border-color: #a59ce1;
+            outline: none;
+            box-shadow: 0 0 10px #b3acefff;
+            background-color: #eeeafb;
+            color: #4b4070;
         }
         .btn-custom {
-            background-color: #28a745;
-            color: white;
+            background-color: #7f6cc9;
+            color: #f5f2ff;
+            font-weight: 800;
+            border: none;
+            border-radius: 18px;
+            padding: 14px 38px;
+            cursor: pointer;
+            font-size: 1.25rem;
+            transition: background-color 0.3s ease;
+            display: inline-block;
+            margin-top: 18px;
+            box-shadow: 0 0 16px #9b8ae6cc;
+            text-transform: uppercase;
         }
-        .pagination .page-item.active .page-link {
-            background-color: #007bff;
-            border-color: #007bff;
+        .btn-custom:hover {
+            background-color: #a798e5;
+            color: #3e3a56;
+            box-shadow: 0 0 22px #a998e5ff;
+        }
+        .btn-upload {
+            background-color: #a798e5;
+            color: #3e3a56;
+            font-weight: 700;
+            padding: 10px 28px;
+            border-radius: 18px;
+            border: none;
+            margin-bottom: 28px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            box-shadow: 0 0 14px #a798e5cc;
+        }
+        .btn-upload:hover {
+            background-color: #b6a7f5;
+            color: #312e48;
+        }
+        h2 {
+            font-weight: 900;
+            margin-bottom: 18px;
+            color: #b9aef0;
+            text-shadow: 0 0 8px #a89defcc;
+            letter-spacing: 1.3px;
+        }
+        input#searchCustomer {
+            padding: 14px 20px;
+            font-size: 1.15rem;
+            border-radius: 18px;
+            border: 2px solid #7f6cc9;
+            width: 100%;
+            max-width: 430px;
+            margin-bottom: 28px;
+            font-weight: 700;
+            color: #4b4470;
+            box-shadow: inset 0 0 8px #8c7fd4cc;
+            background-color: #d3cffdcc;
+        }
+        input#searchCustomer::placeholder {
+            color: #a09ada;
+            font-weight: 600;
+        }
+        table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0 10px;
+            background: #d3cfffcc;
+            color: #4b4470;
+            border-radius: 22px;
+            overflow: hidden;
+            box-shadow: 0 6px 22px #a59ee9cc;
+            font-weight: 800;
+            font-size: 1.02rem;
+        }
+        thead tr {
+            background: #7f6cc9;
+            color: #fff;
+            font-weight: 900;
+            font-size: 1.1rem;
+            box-shadow: 0 4px 14px #998adcbb;
+            letter-spacing: 1px;
+        }
+        tbody tr {
+            transition: background-color 0.3s ease;
+            cursor: pointer;
+            border-radius: 18px;
+        }
+        tbody tr:hover {
+            background-color: #9d91e0cc;
+            color: #3a3260;
+        }
+        tbody tr td {
+            padding: 14px 18px;
+            border-bottom: 1px solid #aea6d6aa;
+        }
+        .btn-info {
+            background-color: #a799e6;
+            border: none;
+            border-radius: 12px;
+            padding: 7px 14px;
+            font-size: 0.9rem;
+            font-weight: 700;
+            transition: background-color 0.3s ease;
+            color: #3a3260;
+            box-shadow: 0 0 9px #a799e6cc;
+        }
+        .btn-info:hover {
+            background-color: #7869cc;
+            color: #fff;
+        }
+        .btn-warning {
+            background-color: #8c79c9;
+            border: none;
+            border-radius: 12px;
+            padding: 7px 14px;
+            font-size: 0.9rem;
+            font-weight: 700;
+            transition: background-color 0.3s ease;
+            color: #fff;
+            box-shadow: 0 0 10px #8c79c9cc;
+        }
+        .btn-warning:hover {
+            background-color: #6858a0;
+        }
+        .btn-danger {
+            background-color: #7a5ea0;
+            border: none;
+            border-radius: 12px;
+            padding: 7px 14px;
+            font-size: 0.9rem;
+            font-weight: 700;
+            transition: background-color 0.3s ease;
+            color: #fff;
+            box-shadow: 0 0 12px #7a5ea0cc;
+        }
+        .btn-danger:hover {
+            background-color: #5a3e78;
+        }
+        .pagination {
+            justify-content: center;
+            margin-top: 28px;
+        }
+        .page-item.active .page-link {
+            background-color: #7f6cc9;
+            border-color: #7f6cc9;
+            color: #fff;
+        }
+        .page-link {
+            color: #4b4470;
+            font-weight: 900;
+            border-radius: 18px;
+            padding: 8px 16px;
+            margin: 0 5px;
+            border: 2px solid transparent;
+            transition: background-color 0.3s ease, border-color 0.3s ease;
+            cursor: pointer;
+            user-select: none;
+            text-decoration: none;
+        }
+        .page-link:hover {
+            background-color: #998adcaa;
+            border-color: #998adcbb;
+            color: #fff;
+        }
+        footer {
+            text-align: center;
+            margin-top: 60px;
+            color: #b9aef0;
+            font-weight: 700;
+            text-shadow: 0 0 6px #a89defcc;
+        }
+        footer a {
+            color: #a89def;
+            text-decoration: none;
+            font-weight: 700;
+        }
+        footer a:hover {
+            text-decoration: underline;
+        }
+        .promo-link {
+            margin-top: 42px;
+            padding: 18px;
+            background-color: #362f5bcc;
+            border: 2px solid #998adc;
+            border-radius: 18px;
+            font-size: 1.3rem;
+            text-align: center;
+            box-shadow: 0 0 18px #7f6cc9cc;
+            font-weight: 700;
+            letter-spacing: 1.2px;
+            color: #b9aef0;
+        }
+        .promo-link a {
+            color: #b9aef0;
+            font-weight: 700;
+            text-decoration: underline;
+            transition: color 0.3s ease;
+        }
+        .promo-link a:hover {
+            color: #7f6cc9;
         }
     </style>
 </head>
 <body>
 
-    <div class="banner d-flex justify-content-center align-items-center">
-        <img src="{{ url_for('static', filename='logo.jpg') }}" alt="Logo">
+<div class="container">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <div style="margin-bottom:20px;">
+          {% for category, message in messages %}
+            <div
+              style="
+                padding: 14px;
+                border-radius: 15px;
+                color: white;
+                font-weight: 700;
+                margin-bottom: 10px;
+                {% if category == 'success' %}
+                  background-color: #28a745;
+                {% elif category == 'danger' %}
+                  background-color: #dc3545;
+                {% else %}
+                  background-color: #17a2b8;
+                {% endif %}
+              "
+            >
+              {{ message }}
+            </div>
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
+
+    <div class="banner">
+        <img src="{{ url_for('static', filename='logo.jpg') }}" alt="Logo" />
         <h1>Quản Lý Khách Hàng - Khách Hàng Doanh Nghiệp - P.QHĐT</h1>
     </div>
 
-    <div class="container mt-5">
-        <form action="{{ url_for('add_customer') }}" method="POST" class="mb-4 card p-4">
-            <h3>THÊM KHÁCH HÀNG</h3>
-            <div class="form-row">
-                <div class="form-group col-md-4">
-                    <label for="name">Họ Tên</label>
-                    <input type="text" id="name" name="name" class="form-control" required>
-                </div>
-                <div class="form-group col-md-4">
-                    <label for="phone">SĐT</label>
-                    <input type="text" id="phone" name="phone" class="form-control" required>
-                </div>
-                <div class="form-group col-md-4">
-                    <label for="address">Địa Chỉ</label>
-                    <input type="text" id="address" name="address" class="form-control" required>
-                </div>
+    <form action="{{ url_for('add_customer') }}" method="POST" class="mb-4 card p-4">
+        <h3>THÊM KHÁCH HÀNG</h3>
+        <div class="form-row">
+            <div class="form-group col-md-4">
+                <label for="name">Họ Tên</label>
+                <input type="text" id="name" name="name" class="form-control" required />
             </div>
-            <div class="form-row">
-                <div class="form-group col-md-4">
-                    <label for="dob">Ngày Sinh</label>
-                    <input type="date" id="dob" name="dob" class="form-control" required>
-                </div>
-                <div class="form-group col-md-4">
-                    <label for="cccd">Mã NV, CCCD</label>
-                    <input type="text" id="cccd" name="cccd" class="form-control" required>
-                </div>
-                <div class="form-group col-md-4">
-                    <label for="cv_code">Gắn Mã CV</label>
-                    <select class="form-control" id="cv_code" name="cv_code" required>
-                        <option value="">Chọn Chuyên Viên</option>
-                        {% for code in cv_codes %}
-                            <option value="{{ code }}">{{ code }}</option>
-                        {% endfor %}
-                    </select>
-                </div>
+            <div class="form-group col-md-4">
+                <label for="phone">SĐT</label>
+                <input type="text" id="phone" name="phone" class="form-control" required />
             </div>
-            <div class="form-row">
-                <div class="form-group col-md-4">
-                    <label for="status">Tình Trạng</label>
-                    <input type="text" class="form-control" id="status" name="status" required>
-                </div>
-                <div class="form-group col-md-4">
-                    <label for="program">CT Áp Dụng</label>
-                    <input type="text" class="form-control" id="program" name="program" required>
-                </div>
-                <div class="form-group col-md-4">
-                    <label for="notes">Ghi Chú</label>
-                    <textarea class="form-control" id="notes" name="notes"></textarea>
-                </div>
+            <div class="form-group col-md-4">
+                <label for="address">Địa Chỉ</label>
+                <input type="text" id="address" name="address" class="form-control" required />
             </div>
-            <button type="submit" class="btn btn-custom">Thêm Khách Hàng</button>
-        </form>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-4">
+                <label for="dob">Ngày Sinh</label>
+                <input type="date" id="dob" name="dob" class="form-control" required />
+            </div>
+            <div class="form-group col-md-4">
+                <label for="cccd">Mã NV, CCCD</label>
+                <input type="text" id="cccd" name="cccd" class="form-control" required />
+            </div>
+            <div class="form-group col-md-4">
+                <label for="cv_code">Gắn Mã CV</label>
+                <select class="form-control" id="cv_code" name="cv_code" required>
+                    <option value="">Chọn Chuyên Viên</option>
+                    {% for code in cv_codes %}
+                    <option value="{{ code }}">{{ code }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-4">
+                <label for="status">Tình Trạng</label>
+                <input type="text" class="form-control" id="status" name="status" required />
+            </div>
+            <div class="form-group col-md-4">
+                <label for="program">CT Áp Dụng</label>
+                <input type="text" class="form-control" id="program" name="program" required />
+            </div>
+            <div class="form-group col-md-4">
+                <label for="notes">Ghi Chú</label>
+                <textarea class="form-control" id="notes" name="notes"></textarea>
+            </div>
+        </div>
+        <button type="submit" class="btn-custom">Thêm Khách Hàng</button>
+    </form>
 
-        <!-- Upload Excel File -->
-        <a href="{{ url_for('upload_file') }}" class="btn btn-upload mb-3">Upload Excel File</a>
+    <!-- Upload Excel File -->
+    <a href="{{ url_for('upload_file') }}" class="btn-upload mb-3">Upload Excel File</a>
 
-        <h2>DANH SÁCH  (Total: {{ customers.total }})</h2>
-        
-        <input type="text" class="form-control mb-3" id="searchCustomer" placeholder="Search for a customer...">
-        
-        <table class="table table-bordered table-striped">
-            <thead>
-                <tr>
-                    <th>Họ Tên</th>
-                    <th>SĐT</th>
-                    <th>Địa Chỉ</th>
-                    <th>Chức Vụ</th>
-                    <th>Tình Trạng</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody id="customerList">
-                {% for customer in customers.items %}
-                    <tr>
-                        <td>{{ customer.name }}</td>
-                        <td>{{ customer.phone }}</td>
-                        <td>{{ customer.address }}</td>
-                        <td>{{ customer.role }}</td>
-                        <td>{{ customer.status }}</td>
-                        <td>
-    <a href="{{ url_for('view_customer', customer_id=customer.id) }}" class="btn btn-info btn-sm">View</a>
-    <a href="{{ url_for('edit_customer', customer_id=customer.id) }}" class="btn btn-warning btn-sm">Edit</a>
+    <h2>DANH SÁCH (Total: {{ customers.total }})</h2>
 
-    {% set time_diff = (datetime.utcnow() - customer.date_added).total_seconds() %}
-    {% if time_diff <= 86400 %}
-        <a href="{{ url_for('delete_customer', customer_id=customer.id) }}" class="btn btn-danger btn-sm">Delete</a>
-    {% else %}
-        <button class="btn btn-danger btn-sm" disabled title="Không thể xóa sau 24 giờ">Delete</button>
-    {% endif %}
-</td>
+    <input
+        type="text"
+        class="form-control mb-3"
+        id="searchCustomer"
+        placeholder="Search for a customer..."
+    />
 
-                    </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-
-        <!-- Pagination -->
-        <nav>
-            <ul class="pagination justify-content-center">
-                {% if customers.has_prev %}
-                    <li class="page-item"><a class="page-link" href="{{ url_for('index', page=customers.prev_num) }}">Previous</a></li>
-                {% else %}
-                    <li class="page-item disabled"><a class="page-link">Previous</a></li>
-                {% endif %}
-        
-                {% for page_num in customers.iter_pages() %}
-                    {% if page_num %}
-                        <li class="page-item {% if page_num == customers.page %}active{% endif %}">
-                            <a class="page-link" href="{{ url_for('index', page=page_num) }}">{{ page_num }}</a>
-                        </li>
+    <table>
+        <thead>
+            <tr>
+                <th>Họ Tên</th>
+                <th>SĐT</th>
+                <th>Địa Chỉ</th>
+                <th>Chức Vụ</th>
+                <th>Tình Trạng</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody id="customerList">
+            {% for customer in customers.items %}
+            <tr>
+                <td>{{ customer.name }}</td>
+                <td>{{ customer.phone }}</td>
+                <td>{{ customer.address }}</td>
+                <td>{{ customer.role }}</td>
+                <td>{{ customer.status }}</td>
+                <td>
+                    {% set time_diff = (datetime.utcnow() - customer.date_added).total_seconds() %}
+                    <a href="{{ url_for('view_customer', customer_id=customer.id) }}" class="btn btn-info btn-sm">View</a>
+                    
+                    <a href="{{ url_for('edit_customer', customer_id=customer.id) }}" class="btn btn-warning btn-sm"
+                       {% if time_diff > 86400 %} aria-disabled="true" tabindex="-1" style="pointer-events:none;opacity:0.5;" title="Không thể sửa sau 24 giờ" {% endif %}>Edit</a>
+                    
+                    {% if time_diff <= 86400 %}
+                    <a href="{{ url_for('delete_customer', customer_id=customer.id) }}" class="btn btn-danger btn-sm">Delete</a>
                     {% else %}
-                        <li class="page-item disabled"><a class="page-link">...</a></li>
+                    <button class="btn btn-danger btn-sm" disabled title="Không thể xóa sau 24 giờ">Delete</button>
                     {% endif %}
-                {% endfor %}
-        
-                {% if customers.has_next %}
-                    <li class="page-item"><a class="page-link" href="{{ url_for('index', page=customers.next_num) }}">Next</a></li>
-                {% else %}
-                    <li class="page-item disabled"><a class="page-link">Next</a></li>
-                {% endif %}
-            </ul>
-        </nav>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 
+    <!-- Pagination -->
+    <nav>
+        <ul class="pagination">
+            {% if customers.has_prev %}
+            <li class="page-item">
+                <a class="page-link" href="{{ url_for('index', page=customers.prev_num) }}">Previous</a>
+            </li>
+            {% else %}
+            <li class="page-item disabled"><a class="page-link">Previous</a></li>
+            {% endif %}
+
+            {% for page_num in customers.iter_pages() %}
+            {% if page_num %}
+            <li class="page-item {% if page_num == customers.page %}active{% endif %}">
+                <a class="page-link" href="{{ url_for('index', page=page_num) }}">{{ page_num }}</a>
+            </li>
+            {% else %}
+            <li class="page-item disabled"><a class="page-link">...</a></li>
+            {% endif %}
+            {% endfor %}
+
+            {% if customers.has_next %}
+            <li class="page-item">
+                <a class="page-link" href="{{ url_for('index', page=customers.next_num) }}">Next</a>
+            </li>
+            {% else %}
+            <li class="page-item disabled"><a class="page-link">Next</a></li>
+            {% endif %}
+        </ul>
+    </nav>
+
+    <!-- Promotion Link -->
+    <div class="promo-link">
+        <h5>Chương Trình Cho Doanh Nghiệp</h5>
+        <p>
+            <a href="https://docs.google.com/document/d/1J-_ur9Zdh5ZbC8nVJ824VD7Oms9UUGfg/edit?usp=drivesdk&ouid=102555709869386963762&rtpof=true&sd=true" target="_blank"> Các chương trình dành cho doanh nghiệp đã ký</a>
+        </p>
     </div>
+</div>
 
-    <footer class="text-center mt-5">
-        <p>Email: khanhlb@meddental.vn</p>
-        <p>Website: <a href="https://www.meddental.vn" target="_blank">www.meddental.vn</a></p>
-    </footer>
+<footer>
+    <p>Email: khanhlb@meddental.vn</p>
+    <p>
+        Website:
+        <a href="https://www.meddental.vn" target="_blank">www.meddental.vn</a>
+    </p>
+</footer>
 
-    <script>
-        document.getElementById('searchCustomer').addEventListener('keyup', function () {
-            const query = this.value.toLowerCase();
-            const rows = document.querySelectorAll('#customerList tr');
+<script>
+    document.getElementById("searchCustomer").addEventListener("keyup", function () {
+        const query = this.value.toLowerCase();
+        const rows = document.querySelectorAll("#customerList tr");
 
-            rows.forEach(function (row) {
-                const name = row.querySelector('td:nth-child(1)').textContent.toLowerCase();
-                const phone = row.querySelector('td:nth-child(2)').textContent.toLowerCase();
-                const role = row.querySelector('td:nth-child(4)').textContent.toLowerCase();
+        rows.forEach(function (row) {
+            const name = row.querySelector("td:nth-child(1)").textContent.toLowerCase();
+            const phone = row.querySelector("td:nth-child(2)").textContent.toLowerCase();
+            const role = row.querySelector("td:nth-child(4)").textContent.toLowerCase();
 
-                if (name.includes(query) || phone.includes(query) || role.includes(query)) {
-                    row.style.display = '';
-                } else {
-                    row.style.display = 'none';
-                }
-            });
+            if (name.includes(query) || phone.includes(query) || role.includes(query)) {
+                row.style.display = "";
+            } else {
+                row.style.display = "none";
+            }
         });
-    </script>
-
+    });
+</script>
 </body>
 </html>
