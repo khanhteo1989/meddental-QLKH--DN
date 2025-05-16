@@ -5,55 +5,92 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Add Customer</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Thêm Khách Hàng</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
+    <style>
+        body {
+            background: #3b2f2f;
+            color: #d9cbb6;
+            font-family: 'Inter', sans-serif;
+            padding: 30px 15px;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: #5a463acc;
+            border-radius: 20px;
+            padding: 30px 25px;
+            box-shadow: 0 0 40px #8b6f5ecc;
+        }
+        h1 {
+            text-align: center;
+            color: #d2bba4;
+            font-weight: 900;
+            margin-bottom: 30px;
+            text-shadow: 0 0 10px #b29373;
+            letter-spacing: 2px;
+        }
+        label {
+            font-weight: 700;
+            color: #b49d80;
+            margin-bottom: 8px;
+            display: block;
+            text-shadow: 0 0 5px #bfae87cc;
+        }
+        input[type="text"],
+        input[type="date"],
+        select,
+        textarea {
+            width: 100%;
+            padding: 14px 16px;
+            border-radius: 16px;
+            border: 2px solid #7e6448;
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #463a29;
+            background-color: #f7f1e4cc;
+            box-shadow: inset 0 0 12px #9e8e6caa;
+            resize: vertical;
+            transition: border-color 0.3s ease;
+        }
+        input[type="text"]:focus,
+        input[type="date"]:focus,
+        select:focus,
+        textarea:focus {
+            border-color: #b89c66;
+            outline: none;
+            box-shadow: 0 0 16px #d4c599;
+            background-color: #fff6dbcc;
+            color: #5b4a25;
+        }
+        button.btn-success {
+            background-color: #a18657;
+            color: #fff6dc;
+            font-weight: 900;
+            border: none;
+            border-radius: 24px;
+            padding: 16px 0;
+            width: 100%;
+            font-size: 1.3rem;
+            cursor: pointer;
+            box-shadow: 0 0 22px #c6b281cc;
+            text-transform: uppercase;
+            transition: background-color 0.3s ease;
+        }
+        button.btn-success:hover {
+            background-color: #c4b37e;
+            color: #3f3011;
+            box-shadow: 0 0 28px #d8cc99;
+        }
+    </style>
 </head>
 <body>
     <div class="container">
-        <h1 class="my-4">Add Customer</h1>
-        <form action="{{ url_for('add_customer') }}" method="POST">
-            <div class="form-group">
-                <label for="name">Họ Tên</label>
-                <input type="text" class="form-control" id="name" name="name" required>
-            </div>
-            <div class="form-group">
-                <label for="address">Địa Chỉ</label>
-                <input type="text" class="form-control" id="address" name="address" required>
-            </div>
-            <div class="form-group">
-                <label for="phone">SĐT</label>
-                <input type="text" class="form-control" id="phone" name="phone" required>
-            </div>
-            <div class="form-group">
-                <label for="cccd">Mã NV, CCCD</label>
-                <input type="text" class="form-control" id="cccd" name="cccd" required>
-            </div>
-            <div class="form-group">
-                <label for="dob">Ngày Sinh</label>
-                <input type="date" class="form-control" id="dob" name="dob" required>
-            </div>
-            <div class="form-group">
-                <label for="cv_code">Gắn Mã CV</label>
-                <select class="form-control" id="cv_code" name="cv_code" required>
-                    <option value="">Chọn Chuyên Viên</option>
-                    {% for code in cv_codes %}
-                        <option value="{{ code }}">{{ code }}</option>
-                    {% endfor %}
-                </select>
-            </div>
-            <div class="form-group">
-                <label for="status">Tình Trạng</label>
-                <input type="text" class="form-control" id="status" name="status" required>
-            </div>
-            <div class="form-group">
-                <label for="program">CT Áp Dụng</label>
-                <input type="text" class="form-control" id="program" name="program" required>
-            </div>
-            <div class="form-group">
-                <label for="notes">Ghi Chú</label>
-                <textarea class="form-control" id="notes" name="notes"></textarea>
-            </div>
-            <button type="submit" class="btn btn-success">Thêm Khách Hàng</button>
-        </form>
-        
+        <h1>Thêm Khách Hàng</h1>
+        <!-- giữ nguyên form ở đây -->
     </div>
 </body>
-</html>
