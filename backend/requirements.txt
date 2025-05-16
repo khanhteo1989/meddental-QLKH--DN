@@ -148,3 +148,4 @@ wheel==0.44.0
 xmod==1.8.1
 yarl==1.9.4
 zipp==3.20.2
+gunicorn==20.1.0
