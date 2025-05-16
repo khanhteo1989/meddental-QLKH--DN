@@ -29,10 +29,11 @@
             border-radius: 20px;
             display: flex;
             align-items: center;
-            justify-content: center;
+            justify-content: space-between; /* Căn giữa và căn phải */
             gap: 20px;
             margin-bottom: 38px;
             box-shadow: 0 0 25px #a57f64;
+            position: relative;
         }
         .banner img {
             width: 120px;
@@ -46,6 +47,20 @@
             margin: 0;
             text-shadow: 0 0 10px #b29373;
             letter-spacing: 1.5px;
+        }
+        .logout {
+            background-color: #a18657;
+            color: #fff6dc;
+            padding: 8px 20px;
+            border-radius: 18px;
+            text-decoration: none;
+            font-weight: 600;
+            text-align: center;
+            display: inline-block;
+        }
+        .logout:hover {
+            background-color: #c4b37e;
+            color: #3f3011;
         }
         form.card {
             background-color: #8a7156cc; /* nâu vàng đậm */
@@ -340,6 +355,12 @@
     <div class="banner">
         <img src="{{ url_for('static', filename='logo.jpg') }}" alt="Logo" />
         <h1>Quản Lý Khách Hàng - Khách Hàng Doanh Nghiệp - P.QHĐT</h1>
+        
+        <!-- Chào và Đăng xuất -->
+        <div style="text-align: right;">
+            <span>Chào {{ current_user.email }}</span><br>
+            <a href="{{ url_for('logout') }}" class="logout">Đăng xuất</a>
+        </div>
     </div>
 
     <form action="{{ url_for('add_customer') }}" method="POST" class="mb-4 card p-4">
@@ -449,6 +470,7 @@
             {% if customers.has_prev %}
             <li class="page-item">
                 <a class="page-link" href="{{ url_for('index', page=customers.prev_num) }}">Previous</a>
+                <a class="page-link" href="{{ url_for('home', page=page_num) }}">{{ page_num }}</a>
             </li>
             {% else %}
             <li class="page-item disabled"><a class="page-link">Previous</a></li>
@@ -457,7 +479,7 @@
             {% for page_num in customers.iter_pages() %}
             {% if page_num %}
             <li class="page-item {% if page_num == customers.page %}active{% endif %}">
-                <a class="page-link" href="{{ url_for('index', page=page_num) }}">{{ page_num }}</a>
+                <a class="page-link" href="{{ url_for('home', page=page_num) }}">{{ page_num }}</a>
             </li>
             {% else %}
             <li class="page-item disabled"><a class="page-link">...</a></li>
@@ -466,7 +488,7 @@
 
             {% if customers.has_next %}
             <li class="page-item">
-                <a class="page-link" href="{{ url_for('index', page=customers.next_num) }}">Next</a>
+                <a class="page-link" href="{{ url_for('home', page=customers.next_num) }}">Next</a>
             </li>
             {% else %}
             <li class="page-item disabled"><a class="page-link">Next</a></li>
