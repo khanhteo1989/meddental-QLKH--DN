@@ -3,7 +3,6 @@ from flask_sqlalchemy import SQLAlchemy
 from werkzeug.utils import secure_filename
 import os
 import pandas as pd
-import random
 from datetime import datetime
 
 CV_CODES = [
@@ -14,7 +13,8 @@ CV_CODES = [
 ]
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///customers.db'
+# Đổi connection string đúng info db PostgreSQL mày đây nha:
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://neondb_owner:npg_KcInu5GkdZ1S@ep-delicate-queen-a1ffwyhq-pooler.ap-southeast-1.aws.neon.tech/neondb?sslmode=require'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['UPLOAD_FOLDER'] = 'uploads'
 app.config['ALLOWED_EXTENSIONS'] = {'xls', 'xlsx'}
@@ -44,7 +44,6 @@ with app.app_context():
 def index():
     page = request.args.get('page', 1, type=int)
     customers = Customer.query.paginate(page=page, per_page=20, error_out=False)
-    # Truyền thêm datetime vào template để tính 24h khóa xóa
     return render_template('index.html', customers=customers, cv_codes=CV_CODES, datetime=datetime)
 
 @app.route('/add_customer', methods=['POST'])
@@ -120,13 +119,10 @@ def view_customer(customer_id):
 @app.route('/delete_customer/<int:customer_id>')
 def delete_customer(customer_id):
     customer = Customer.query.get_or_404(customer_id)
-    # Kiểm tra xem đã hơn 24h chưa trước khi xóa
     from datetime import datetime, timedelta
     now = datetime.utcnow()
     if (now - customer.date_added) > timedelta(hours=24):
-        # Đã quá 24h, không cho xóa, redirect về index với thông báo (nếu muốn)
         return redirect(url_for('index'))
-    # Nếu chưa quá 24h thì xóa bình thường
     db.session.delete(customer)
     db.session.commit()
     return redirect(url_for('index'))
