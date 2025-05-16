@@ -8,8 +8,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
     <style>
         body {
-            background: #2e2543; /* tím trầm, dịu mắt */
-            color: #e8dff5; /* tím pastel nhạt */
+            background: #3b2f2f; /* nâu socola đậm */
+            color: #d9cbb6; /* nâu kem nhạt */
             font-family: 'Inter', sans-serif;
             margin: 0;
             padding: 20px;
@@ -18,52 +18,52 @@
         .container {
             max-width: 1200px;
             margin: 0 auto;
-            background: #3a2f55cc; /* nền tím nhạt trong suốt */
-            border-radius: 18px;
+            background: #5a463acc; /* nâu nhạt trong suốt */
+            border-radius: 20px;
             padding: 30px;
-            box-shadow: 0 0 30px #9377c2aa; /* bóng tím dịu */
+            box-shadow: 0 0 40px #8b6f5ecc; /* bóng nâu sáng */
         }
         .banner {
-            background: #4b3f7d;
+            background: #6f5846; /* nâu cà phê */
             padding: 22px 20px;
-            border-radius: 18px;
+            border-radius: 20px;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 18px;
+            gap: 20px;
             margin-bottom: 38px;
-            box-shadow: 0 0 20px #a899d1;
+            box-shadow: 0 0 25px #a57f64;
         }
         .banner img {
             width: 120px;
-            border-radius: 18px;
-            box-shadow: 0 0 20px #a899d1;
+            border-radius: 20px;
+            box-shadow: 0 0 25px #a57f64;
         }
         .banner h1 {
             font-size: 2.6rem;
             font-weight: 800;
-            color: #c2b7ea;
+            color: #d2bba4;
             margin: 0;
-            text-shadow: 0 0 8px #a99ff3;
+            text-shadow: 0 0 10px #b29373;
             letter-spacing: 1.5px;
         }
         form.card {
-            background-color: #9e8bcccc; /* tím nhẹ */
-            color: #3e2f5a;
-            border-radius: 22px;
+            background-color: #8a7156cc; /* nâu vàng đậm */
+            color: #f0e6d2;
+            border-radius: 24px;
             padding: 28px 25px;
-            box-shadow: 0 8px 28px #8775b3bb;
+            box-shadow: 0 8px 28px #b19e7dbb;
             margin-bottom: 38px;
             transition: box-shadow 0.3s ease;
         }
         form.card:hover {
-            box-shadow: 0 12px 35px #b1a1e0dd;
+            box-shadow: 0 12px 35px #c2b898dd;
         }
         form.card h3 {
             margin-bottom: 24px;
             font-weight: 900;
-            color: #5b4a93;
-            text-shadow: 0 0 6px #8678b7;
+            color: #d7c5a5;
+            text-shadow: 0 0 8px #bfae87;
         }
         .form-row {
             display: flex;
@@ -78,35 +78,35 @@
         .form-group label {
             margin-bottom: 6px;
             font-weight: 700;
-            color: #5b4a93;
-            text-shadow: 0 0 4px #8778b3bb;
+            color: #b49d80;
+            text-shadow: 0 0 5px #bfae87cc;
         }
         .form-group input,
         .form-group select,
         .form-group textarea {
             padding: 12px 14px;
             border-radius: 14px;
-            border: 2px solid #7e6bc1;
+            border: 2px solid #7e6448;
             font-size: 1.05rem;
             transition: border-color 0.3s ease;
             resize: vertical;
             font-weight: 600;
-            color: #392f5d;
-            background-color: #dcd6f2cc;
-            box-shadow: inset 0 0 8px #a898e1aa;
+            color: #463a29;
+            background-color: #f7f1e4cc;
+            box-shadow: inset 0 0 8px #9e8e6caa;
         }
         .form-group input:focus,
         .form-group select:focus,
         .form-group textarea:focus {
-            border-color: #a59ce1;
+            border-color: #b89c66;
             outline: none;
-            box-shadow: 0 0 10px #b3acefff;
-            background-color: #eeeafb;
-            color: #4b4070;
+            box-shadow: 0 0 10px #d4c599;
+            background-color: #fff6dbcc;
+            color: #5b4a25;
         }
         .btn-custom {
-            background-color: #7f6cc9;
-            color: #f5f2ff;
+            background-color: #a18657;
+            color: #fff6dc;
             font-weight: 800;
             border: none;
             border-radius: 18px;
@@ -116,17 +116,17 @@
             transition: background-color 0.3s ease;
             display: inline-block;
             margin-top: 18px;
-            box-shadow: 0 0 16px #9b8ae6cc;
+            box-shadow: 0 0 16px #c6b281cc;
             text-transform: uppercase;
         }
         .btn-custom:hover {
-            background-color: #a798e5;
-            color: #3e3a56;
-            box-shadow: 0 0 22px #a998e5ff;
+            background-color: #c4b37e;
+            color: #3f3011;
+            box-shadow: 0 0 22px #d8cc99;
         }
         .btn-upload {
-            background-color: #a798e5;
-            color: #3e3a56;
+            background-color: #c4b37e;
+            color: #3f3011;
             font-weight: 700;
             padding: 10px 28px;
             border-radius: 18px;
@@ -136,54 +136,54 @@
             transition: background-color 0.3s ease;
             text-decoration: none;
             display: inline-block;
-            box-shadow: 0 0 14px #a798e5cc;
+            box-shadow: 0 0 14px #c4b37ecc;
         }
         .btn-upload:hover {
-            background-color: #b6a7f5;
-            color: #312e48;
+            background-color: #d9cca1;
+            color: #322b0d;
         }
         h2 {
             font-weight: 900;
             margin-bottom: 18px;
-            color: #b9aef0;
-            text-shadow: 0 0 8px #a89defcc;
+            color: #d7c7a6;
+            text-shadow: 0 0 12px #b9a873bb;
             letter-spacing: 1.3px;
         }
         input#searchCustomer {
             padding: 14px 20px;
             font-size: 1.15rem;
             border-radius: 18px;
-            border: 2px solid #7f6cc9;
+            border: 2px solid #a18657;
             width: 100%;
             max-width: 430px;
             margin-bottom: 28px;
             font-weight: 700;
-            color: #4b4470;
-            box-shadow: inset 0 0 8px #8c7fd4cc;
-            background-color: #d3cffdcc;
+            color: #756548;
+            box-shadow: inset 0 0 12px #d4c599cc;
+            background-color: #f1e8c3cc;
         }
         input#searchCustomer::placeholder {
-            color: #a09ada;
+            color: #b7a574;
             font-weight: 600;
         }
         table {
             width: 100%;
             border-collapse: separate;
             border-spacing: 0 10px;
-            background: #d3cfffcc;
-            color: #4b4470;
+            background: #7b6c59cc;
+            color: #e0d7b7;
             border-radius: 22px;
             overflow: hidden;
-            box-shadow: 0 6px 22px #a59ee9cc;
+            box-shadow: 0 6px 22px #a5986fcc;
             font-weight: 800;
             font-size: 1.02rem;
         }
         thead tr {
-            background: #7f6cc9;
-            color: #fff;
+            background: #a18657;
+            color: #fff6dc;
             font-weight: 900;
             font-size: 1.1rem;
-            box-shadow: 0 4px 14px #998adcbb;
+            box-shadow: 0 4px 14px #c4b37ebc;
             letter-spacing: 1px;
         }
         tbody tr {
@@ -192,67 +192,67 @@
             border-radius: 18px;
         }
         tbody tr:hover {
-            background-color: #9d91e0cc;
-            color: #3a3260;
+            background-color: #c4b37ecc;
+            color: #3f3011;
         }
         tbody tr td {
             padding: 14px 18px;
-            border-bottom: 1px solid #aea6d6aa;
+            border-bottom: 1px solid #b9a873aa;
         }
         .btn-info {
-            background-color: #a799e6;
+            background-color: #d2be8d;
             border: none;
             border-radius: 12px;
             padding: 7px 14px;
             font-size: 0.9rem;
             font-weight: 700;
             transition: background-color 0.3s ease;
-            color: #3a3260;
-            box-shadow: 0 0 9px #a799e6cc;
+            color: #3f3011;
+            box-shadow: 0 0 9px #d2be8dcc;
         }
         .btn-info:hover {
-            background-color: #7869cc;
-            color: #fff;
+            background-color: #a18657;
+            color: #fff6dc;
         }
         .btn-warning {
-            background-color: #8c79c9;
+            background-color: #b99e5e;
             border: none;
             border-radius: 12px;
             padding: 7px 14px;
             font-size: 0.9rem;
             font-weight: 700;
             transition: background-color 0.3s ease;
-            color: #fff;
-            box-shadow: 0 0 10px #8c79c9cc;
+            color: #fff6dc;
+            box-shadow: 0 0 10px #b99e5ecc;
         }
         .btn-warning:hover {
-            background-color: #6858a0;
+            background-color: #816c3b;
         }
         .btn-danger {
-            background-color: #7a5ea0;
+            background-color: #907743;
             border: none;
             border-radius: 12px;
             padding: 7px 14px;
             font-size: 0.9rem;
             font-weight: 700;
             transition: background-color 0.3s ease;
-            color: #fff;
-            box-shadow: 0 0 12px #7a5ea0cc;
+            color: #fff6dc;
+            box-shadow: 0 0 12px #907743cc;
         }
         .btn-danger:hover {
-            background-color: #5a3e78;
+            background-color: #5e4a1f;
         }
         .pagination {
             justify-content: center;
             margin-top: 28px;
         }
         .page-item.active .page-link {
-            background-color: #7f6cc9;
-            border-color: #7f6cc9;
-            color: #fff;
+            background-color: #a18657;
+            border-color: #a18657;
+            color: #fff6dc;
         }
         .page-link {
-            color: #4b4470;
+            color: #e0d7b7;
             font-weight: 900;
             border-radius: 18px;
             padding: 8px 16px;
@@ -264,19 +264,19 @@
             text-decoration: none;
         }
         .page-link:hover {
-            background-color: #998adcaa;
-            border-color: #998adcbb;
-            color: #fff;
+            background-color: #b99e5ecc;
+            border-color: #b99e5ecc;
+            color: #fff6dc;
         }
         footer {
             text-align: center;
             margin-top: 60px;
-            color: #b9aef0;
+            color: #d7c7a6;
             font-weight: 700;
-            text-shadow: 0 0 6px #a89defcc;
+            text-shadow: 0 0 8px #b9a873bb;
         }
         footer a {
-            color: #a89def;
+            color: #b9a873;
             text-decoration: none;
             font-weight: 700;
         }
@@ -286,24 +286,24 @@
         .promo-link {
             margin-top: 42px;
             padding: 18px;
-            background-color: #362f5bcc;
-            border: 2px solid #998adc;
+            background-color: #5a4f3acc;
+            border: 2px solid #a18657;
             border-radius: 18px;
             font-size: 1.3rem;
             text-align: center;
-            box-shadow: 0 0 18px #7f6cc9cc;
+            box-shadow: 0 0 18px #a18657cc;
             font-weight: 700;
             letter-spacing: 1.2px;
-            color: #b9aef0;
+            color: #d7c7a6;
         }
         .promo-link a {
-            color: #b9aef0;
+            color: #d7c7a6;
             font-weight: 700;
             text-decoration: underline;
             transition: color 0.3s ease;
         }
         .promo-link a:hover {
-            color: #7f6cc9;
+            color: #a18657;
         }
     </style>
 </head>
