@@ -6,6 +6,18 @@ import os
 import pandas as pd
 from datetime import datetime
 from werkzeug.security import generate_password_hash, check_password_hash
+import random
+import string
+
+def generate_unique_code():
+    while True:
+        # Tạo mã ngẫu nhiên có định dạng "DN-xxxxxxxxx"
+        code = 'DN-' + ''.join(random.choices(string.digits, k=9))
+        
+        # Kiểm tra xem mã này đã tồn tại trong cơ sở dữ liệu chưa
+        if not Customer.query.filter_by(cccd=code).first():
+            return code
+
 
 # Dữ liệu về mã CV
 CV_CODES = [
@@ -80,6 +92,11 @@ def register():
         email = request.form['email']
         password = request.form['password']
         
+        # Kiểm tra email có đuôi @meddental.vn
+        if not email.endswith('@meddental.vn'):
+            flash('Bạn Không Phải Nhân Viên Meddental!!!!', 'danger')
+            return redirect(url_for('register'))
+        
         # Kiểm tra xem email đã tồn tại chưa
         existing_user = User.query.filter_by(email=email).first()
         if existing_user:
@@ -99,6 +116,44 @@ def register():
     
     return render_template('register.html')
 
+# Route cho quên mật khẩu
+@app.route('/forgot_password', methods=['GET', 'POST'])
+def forgot_password():
+    if request.method == 'POST':
+        email = request.form['email']
+        employee_id = request.form['employee_id']
+
+        # Kiểm tra email và mã số nhân viên
+        user = User.query.filter_by(email=email).first()
+        if user and user.email == email:
+            # Send email to reset password or generate a temporary password (just an example)
+            flash('Đặt lại mật khẩu thành công. Kiểm tra email để nhận hướng dẫn!', 'success')
+            return redirect(url_for('login'))
+        else:
+            flash('Email hoặc mã nhân viên không đúng!', 'danger')
+            return redirect(url_for('forgot_password'))
+    return render_template('forgot_password.html')
+
+# Route cho đổi mật khẩu
+@app.route('/change_password', methods=['GET', 'POST'])
+@login_required
+def change_password():
+    if request.method == 'POST':
+        current_password = request.form['current_password']
+        new_password = request.form['new_password']
+        
+        user = current_user  # Lấy người dùng hiện tại
+        if check_password_hash(user.password, current_password):
+            user.password = generate_password_hash(new_password, method='pbkdf2:sha256')
+            db.session.commit()
+            flash('Mật khẩu đã được thay đổi thành công!', 'success')
+            return redirect(url_for('home'))
+        else:
+            flash('Mật khẩu hiện tại không đúng!', 'danger')
+    
+    return render_template('change_password.html')
+
+
 # Đăng xuất route
 @app.route('/logout')
 @login_required
@@ -115,8 +170,14 @@ def load_user(user_id):
 @app.route('/')
 @login_required
 def home():
+    search_query = request.args.get('search', '', type=str)  # Lấy từ tham số tìm kiếm trong URL
     page = request.args.get('page', 1, type=int)
-    customers = Customer.query.paginate(page=page, per_page=20, error_out=False)
+    
+    if search_query:
+        customers = Customer.query.filter(Customer.phone.like(f'%{search_query}%')).paginate(page=page, per_page=20)
+    else:
+        customers = Customer.query.order_by(Customer.date_added.desc()).paginate(page=page, per_page=20)
+    
     return render_template('index.html', customers=customers, cv_codes=CV_CODES, datetime=datetime)
 
 # Route thêm khách hàng
@@ -127,7 +188,7 @@ def add_customer():
         'phone': request.form['phone'],
         'address': request.form['address'],
         'dob': request.form['dob'],
-        'cccd': request.form['cccd'],
+        'cccd': generate_unique_code(),  # Mã CCCD được tự động sinh
         'role': request.form['cv_code'],
         'status': request.form['status'],
         'program': request.form['program'],
@@ -198,10 +259,13 @@ def delete_customer(customer_id):
     customer = Customer.query.get_or_404(customer_id)
     from datetime import datetime, timedelta
     now = datetime.utcnow()
+    # Chỉ cho phép xóa trong vòng 24 giờ
     if (now - customer.date_added) > timedelta(hours=24):
+        flash('Không thể xóa khách hàng sau 24 giờ', 'warning')
         return redirect(url_for('home'))
     db.session.delete(customer)
     db.session.commit()
+    flash('Khách hàng đã bị xóa', 'success')
     return redirect(url_for('home'))
 
 # Route upload file khách hàng
@@ -223,7 +287,7 @@ def upload_file():
                     name=row['Họ Tên'],
                     address=row['Địa Chỉ'],
                     phone=row['SĐT'],
-                    cccd=row['Mã nv,CCCD'],
+                    cccd=generate_unique_code(),  # Tạo mã khách hàng ngẫu nhiên
                     dob=row['Ngày Sinh'],
                     role=row['CV Quản Lý'],
                     status=row['Tình Trạng'],
