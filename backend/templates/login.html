@@ -64,7 +64,7 @@
             color: #5b4a25;
         }
 
-        .btn-register {
+        .btn-login {
             background-color: #a18657;
             color: #fff6dc;
             font-weight: 900;
@@ -80,37 +80,31 @@
             text-transform: uppercase;
         }
 
-        .btn-register:hover {
+        .btn-login:hover {
             background-color: #c4b37e;
             color: #3f3011;
             box-shadow: 0 0 28px #d8cc99;
         }
 
-        .alert {
-            padding: 14px;
-            background-color: #dc3545;
-            color: white;
-            font-weight: 700;
-            margin-bottom: 20px;
+        .forgot-link, .change-password-link, .register-link {
+            display: block;
+            text-align: center;
+            margin-top: 15px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            color: #d2bba4;
+            text-decoration: none;
         }
-     </style>
+
+        .forgot-link:hover, .change-password-link:hover, .register-link:hover {
+            color: #c4b37e;
+        }
+    </style>
 </head>
 <body>
     <div class="container">
         <h1>Đăng Nhập</h1>
 
-        {% with messages = get_flashed_messages(with_categories=true) %}
-        {% if messages %}
-            <div>
-                {% for category, message in messages %}
-                    <div class="alert">
-                        {{ message }}
-                    </div>
-                {% endfor %}
-            </div>
-        {% endif %}
-        {% endwith %}
-        
         <form action="{{ url_for('login') }}" method="POST">
             <div class="form-group">
                 <label for="email">Email</label>
@@ -120,10 +114,13 @@
                 <label for="password">Mật khẩu</label>
                 <input type="password" id="password" name="password" class="form-control" required />
             </div>
-            <button type="submit" class="btn-register">Đăng Nhập</button>
+            <button type="submit" class="btn-login">Đăng Nhập</button>
         </form>
-        
-        <p>Chưa có tài khoản? <a href="{{ url_for('register') }}" class="btn-register">Đăng Ký</a></p>
+
+        <!-- Links to reset password, change password, and register -->
+        <a href="{{ url_for('forgot_password') }}" class="forgot-link">Quên mật khẩu?</a>
+        <a href="{{ url_for('change_password') }}" class="change-password-link">Đổi mật khẩu</a>
+        <a href="{{ url_for('register') }}" class="register-link">Chưa có tài khoản? Đăng ký</a>
     </div>
 </body>
 </html>
