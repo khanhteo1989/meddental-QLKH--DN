@@ -7,6 +7,140 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
     <style>
+        /* Giao diện mặc định cho desktop */
+body {
+    background: #3b2f2f; /* nâu socola đậm */
+    color: #d9cbb6; /* nâu kem nhạt */
+    font-family: 'Inter', sans-serif;
+    margin: 0;
+    padding: 20px;
+    min-height: 100vh;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    background: #5a463acc; /* nâu nhạt trong suốt */
+    border-radius: 20px;
+    padding: 30px;
+    box-shadow: 0 0 40px #8b6f5ecc; /* bóng nâu sáng */
+}
+
+.promo-link {
+    margin-top: 42px;
+    padding: 18px;
+    background-color: #5a4f3acc;
+    border: 2px solid #a18657;
+    border-radius: 18px;
+    font-size: 1.3rem;
+    text-align: center;
+    box-shadow: 0 0 18px #a18657cc;
+    font-weight: 700;
+    letter-spacing: 1.2px;
+    color: #d7c7a6;
+}
+
+.promo-link a {
+    color: #d7c7a6;
+    font-weight: 700;
+    text-decoration: underline;
+    transition: color 0.3s ease;
+}
+
+.promo-link a:hover {
+    color: #a18657;
+}
+
+.promo-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+}
+
+footer {
+    text-align: center;
+    margin-top: 60px;
+    color: #d7c7a6;
+    font-weight: 700;
+    text-shadow: 0 0 8px #b9a873bb;
+}
+
+/* Media Query cho màn hình điện thoại */
+@media only screen and (max-width: 768px) {
+    .promo-link {
+        font-size: 1.1rem; /* Giảm kích thước chữ cho điện thoại */
+        padding: 15px;
+    }
+
+    .promo-content {
+        padding: 0 15px; /* Giảm bớt padding để dễ đọc trên điện thoại */
+    }
+
+    footer {
+        margin-top: 40px; /* Giảm khoảng cách cho chân trang */
+    }
+
+    /* Chỉnh sửa bố cục form cho dễ sử dụng trên điện thoại */
+    .form-row {
+        flex-direction: column; /* Sắp xếp các phần tử form theo cột */
+        gap: 12px;
+    }
+
+    .form-group {
+        flex: 1 1 100%;
+    }
+
+    .container {
+        padding: 15px; /* Giảm padding cho màn hình nhỏ */
+    }
+
+    /* Điều chỉnh cho Pagination */
+    .pagination {
+        justify-content: center;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px; /* Khoảng cách giữa các nút phân trang */
+        margin-top: 20px;
+    }
+
+    .page-item a, .page-item span {
+        padding: 6px 12px;
+        font-size: 1rem; /* Giảm kích thước nút phân trang */
+    }
+
+    .page-item.active .page-link {
+        background-color: #a18657;
+        border-color: #a18657;
+        color: #fff6dc;
+    }
+
+    .page-item a:hover, .page-item span:hover {
+        background-color: #b99e5ecc;
+        border-color: #b99e5ecc;
+        color: #fff6dc;
+    }
+}
+
+/* Chỉnh sửa footer trên màn hình nhỏ */
+@media only screen and (max-width: 480px) {
+    footer {
+        margin-top: 30px; /* Giảm khoảng cách dưới cùng trên điện thoại nhỏ */
+    }
+
+    footer p {
+        font-size: 0.9rem; /* Giảm kích thước font trong footer */
+    }
+
+    footer a {
+        font-size: 0.9rem;
+    }
+
+    .promo-link {
+        margin-top: 30px;
+    }
+}
+
         body {
             background: #3b2f2f; /* nâu socola đậm */
             color: #d9cbb6; /* nâu kem nhạt */
@@ -406,7 +540,7 @@
                 <input type="date" id="dob" name="dob" class="form-control" required />
             </div>
             <div class="form-group col-md-4">
-                <label for="cccd">Mã NV, CCCD</label>
+                <label for="cccd">Mã KH</label>
                 <input type="text" id="cccd" name="cccd" class="form-control" required />
             </div>
             <div class="form-group col-md-4">
@@ -455,7 +589,7 @@
                 <th>SĐT</th>
                 <th>Địa Chỉ</th>
                 <th>Gắn Mã CV</th>
-                <th>Tình Trạng</th>
+                <th>CT Áp Dụng</th>
                 <th>Actions</th>
             </tr>
         </thead>
@@ -466,7 +600,7 @@
         <td>{{ customer.phone }}</td>
         <td>{{ customer.address }}</td>
         <td>{{ customer.role }}</td>
-        <td>{{ customer.status }}</td>
+        <td>{{ customer.program }}</td>
         <td>
             {% set time_diff = (datetime.utcnow() - customer.date_added).total_seconds() %}
             
