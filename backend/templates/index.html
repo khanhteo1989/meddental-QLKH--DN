@@ -257,69 +257,90 @@
         .btn-danger:hover {
             background-color: #5e4a1f;
         }
-        .pagination {
-            justify-content: center;
-            margin-top: 28px;
-        }
-        .page-item.active .page-link {
-            background-color: #a18657;
-            border-color: #a18657;
-            color: #fff6dc;
-        }
-        .page-link {
-            color: #e0d7b7;
-            font-weight: 900;
-            border-radius: 18px;
-            padding: 8px 16px;
-            margin: 0 5px;
-            border: 2px solid transparent;
-            transition: background-color 0.3s ease, border-color 0.3s ease;
-            cursor: pointer;
-            user-select: none;
-            text-decoration: none;
-        }
-        .page-link:hover {
-            background-color: #b99e5ecc;
-            border-color: #b99e5ecc;
-            color: #fff6dc;
-        }
-        footer {
-            text-align: center;
-            margin-top: 60px;
-            color: #d7c7a6;
-            font-weight: 700;
-            text-shadow: 0 0 8px #b9a873bb;
-        }
-        footer a {
-            color: #b9a873;
-            text-decoration: none;
-            font-weight: 700;
-        }
-        footer a:hover {
-            text-decoration: underline;
-        }
-        .promo-link {
-            margin-top: 42px;
-            padding: 18px;
-            background-color: #5a4f3acc;
-            border: 2px solid #a18657;
-            border-radius: 18px;
-            font-size: 1.3rem;
-            text-align: center;
-            box-shadow: 0 0 18px #a18657cc;
-            font-weight: 700;
-            letter-spacing: 1.2px;
-            color: #d7c7a6;
-        }
-        .promo-link a {
-            color: #d7c7a6;
-            font-weight: 700;
-            text-decoration: underline;
-            transition: color 0.3s ease;
-        }
-        .promo-link a:hover {
-            color: #a18657;
-        }
+.pagination {
+    justify-content: center;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;  /* Thêm khoảng cách giữa các trang */
+    margin-top: 28px;
+}
+
+.page-item {
+    list-style: none;
+}
+
+.page-item a, .page-item span {
+    padding: 8px 16px;
+    border-radius: 18px;
+    margin: 0 5px;
+    border: 2px solid transparent;
+    background-color: #7b6c59cc;
+    color: #e0d7b7;
+    font-weight: 900;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+.page-item.active .page-link {
+    background-color: #a18657;
+    border-color: #a18657;
+    color: #fff6dc;
+}
+
+.page-item a:hover, .page-item span:hover {
+    background-color: #b99e5ecc;
+    border-color: #b99e5ecc;
+    color: #fff6dc;
+}
+
+.promo-link {
+    margin-top: 42px;
+    padding: 18px;
+    background-color: #5a4f3acc;
+    border: 2px solid #a18657;
+    border-radius: 18px;
+    font-size: 1.3rem;
+    text-align: center;
+    box-shadow: 0 0 18px #a18657cc;
+    font-weight: 700;
+    letter-spacing: 1.2px;
+    color: #d7c7a6;
+}
+
+.promo-link a {
+    color: #d7c7a6;
+    font-weight: 700;
+    text-decoration: underline;
+    transition: color 0.3s ease;
+}
+
+.promo-link a:hover {
+    color: #a18657;
+}
+
+.promo-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+}
+
+.contact-info p {
+    font-size: 1rem;
+    margin: 5px 0;
+}
+
+.contact-info a {
+    color: #d7c7a6;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.contact-info a:hover {
+    color: #a18657;
+}
+
     </style>
 </head>
 <body>
@@ -503,19 +524,19 @@
     </nav>
 
     <!-- Promotion Link -->
-    <div class="promo-link">
-        <h5>CÔNG CU, CHƯƠNG TRÌNH DOANH NGHIỆP</h5>
+<div class="promo-link">
+    <h5>CÔNG CỤ & CHƯƠNG TRÌNH </h5>
+    <div class="promo-content">
         <p>
-            <a href="https://docs.google.com/document/d/1J-_ur9Zdh5ZbC8nVJ824VD7Oms9UUGfg/edit?usp=drivesdk&ouid=102555709869386963762&rtpof=true&sd=true" target="_blank"> Các chương trình dành cho doanh nghiệp đã ký</a>
-            
+            <a href="https://docs.google.com/document/d/1J-_ur9Zdh5ZbC8nVJ824VD7Oms9UUGfg/edit?usp=drivesdk&ouid=102555709869386963762&rtpof=true&sd=true" target="_blank">Chương trình đã ký </a>
         </p>
-         <p>
-             <a href="https://docs.google.com/forms/d/e/1FAIpQLSepyICT5JqfHzXzeBvz5KjVc2gAuTJZR4h4hwLjMvbBtJ97Ng/viewform" target="_blank"> Mẫu Đăng Ký khám cho KHDN</a>
+        <p>
+            <a href="https://docs.google.com/forms/d/e/1FAIpQLSepyICT5JqfHzXzeBvz5KjVc2gAuTJZR4h4hwLjMvbBtJ97Ng/viewform" target="_blank">Form đăng ký khám </a>
         </p>
-        
     </div>
+</div>
 
-    
+<!-- Footer -->
 <footer>
     <p>Email: khanhlb@meddental.vn</p>
     <p>
@@ -523,6 +544,7 @@
         <a href="https://www.meddental.vn" target="_blank">www.meddental.vn</a>
     </p>
 </footer>
+
 
 <script>
     document.getElementById("searchCustomer").addEventListener("keyup", function () {
