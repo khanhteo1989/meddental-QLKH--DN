@@ -7,7 +7,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
     <style>
-       
+        /* Giao diện mặc định cho desktop */
+
 /* Chỉ sử dụng phần CSS cho ảnh nền */
 body {
     background: url("{{ url_for('static', filename='backgr.jpg') }}") no-repeat center center fixed; /* ảnh nền */
@@ -17,6 +18,15 @@ body {
     margin: 0;
     padding: 20px;
     min-height: 100vh;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    background: #5a463acc; /* nâu nhạt trong suốt */
+    border-radius: 20px;
+    padding: 30px;
+    box-shadow: 0 0 40px #8b6f5ecc; /* bóng nâu sáng */
 }
 
 
@@ -70,6 +80,54 @@ footer {
 }
 
 /* Media Query cho màn hình điện thoại */
+.tool-header {
+    text-align: center;
+    font-size: 1.6rem;
+    font-weight: 800;
+    color: #f8e7c0;
+    text-shadow: 0 0 8px #b89c6f99;
+    margin-bottom: 30px;
+    margin-top: 60px;
+}
+
+.tool-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 30px;
+    padding: 0 20px;
+}
+
+.tool-card {
+    background-color: rgba(255, 248, 220, 0.05);
+    border: 1px solid #b49d80;
+    border-radius: 18px;
+    padding: 24px 36px;
+    text-align: center;
+    text-decoration: none;
+    color: #f0e1c0;
+    font-weight: 700;
+    box-shadow: 0 0 12px #a88e6d22;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    min-width: 200px;
+}
+
+.tool-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 0 18px #d9b97a;
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+.tool-card .icon {
+    font-size: 2rem;
+    margin-bottom: 10px;
+    text-shadow: 0 0 6px #f6e2b055;
+}
+
+.tool-card .title {
+    font-size: 1.1rem;
+}
+
 @media only screen and (max-width: 768px) {
     .promo-link {
         font-size: 1.1rem; /* Giảm kích thước chữ cho điện thoại */
@@ -144,6 +202,7 @@ footer {
     }
 }
 
+      
         .container {
             max-width: 1200px;
             margin: 0 auto;
@@ -550,7 +609,7 @@ footer {
         </div>
         <div class="form-row">
             <div class="form-group col-md-4">
-                <label for="status">Tình Trạng</label>
+                <label for="status">Doanh Nghiệp</label>
                 <input type="text" class="form-control" id="status" name="status" required />
             </div>
             <div class="form-group col-md-4">
@@ -564,6 +623,10 @@ footer {
         </div>
         <button type="submit" class="btn-custom">Thêm Khách Hàng</button>
     </form>
+
+    <!-- Link tải file Excel -->
+<a href="{{ url_for('download_customers') }}" class="btn-upload mb-3">Tải về Excel</a>
+
 
     <!-- Upload Excel File -->
     <a href="{{ url_for('upload_file') }}" class="btn-upload mb-3">Upload Excel File</a>
@@ -595,25 +658,25 @@ footer {
         <td>{{ customer.phone }}</td>
         <td>{{ customer.address }}</td>
         <td>{{ customer.role }}</td>
-        <td>{{ customer.program }}</td>
-        <td>
-            {% set time_diff = (datetime.utcnow() - customer.date_added).total_seconds() %}
-            
-            <!-- View button -->
-            <a href="{{ url_for('view_customer', customer_id=customer.id) }}" class="btn btn-info btn-sm">View</a>
+        <td>{{ customer.status }}</td>
+<td>
+    {% set time_diff = (datetime.utcnow() - customer.date_added).total_seconds() %}
 
-            <!-- Edit button: Always enabled, no restriction -->
-            <a href="{{ url_for('edit_customer', customer_id=customer.id) }}" class="btn btn-warning btn-sm">
-                Edit
-            </a>
+    <a href="{{ url_for('view_customer', customer_id=customer.id) }}" class="btn btn-info btn-sm">View</a>
 
-            <!-- Delete button: Disabled after 24 hours -->
-            {% if time_diff <= 86400 %}
+    <a href="{{ url_for('edit_customer', customer_id=customer.id) }}" class="btn btn-warning btn-sm">Edit</a>
+
+    {% if current_user.email in admin_emails %}
+        {% if time_diff <= 86400 %}
             <a href="{{ url_for('delete_customer', customer_id=customer.id) }}" class="btn btn-danger btn-sm">Delete</a>
-            {% else %}
+        {% else %}
             <button class="btn btn-danger btn-sm" disabled title="Không thể xóa sau 24 giờ">Delete</button>
-            {% endif %}
-        </td>
+        {% endif %}
+    {% endif %}
+</td>
+
+
+
     </tr>
     {% endfor %}
 </tbody>
@@ -653,20 +716,25 @@ footer {
     </nav>
 
     <!-- Promotion Link -->
-<div class="promo-link">
-    <h5>CÔNG CỤ & CHƯƠNG TRÌNH </h5>
-    <div class="promo-content">
-        <p>
-            <a href="https://docs.google.com/document/d/1J-_ur9Zdh5ZbC8nVJ824VD7Oms9UUGfg/edit?usp=drivesdk&ouid=102555709869386963762&rtpof=true&sd=true" target="_blank">Chương trình đã ký </a>
-        </p>
-        <p>
-            <a href="https://docs.google.com/forms/d/e/1FAIpQLSepyICT5JqfHzXzeBvz5KjVc2gAuTJZR4h4hwLjMvbBtJ97Ng/viewform" target="_blank">Form đăng ký khám </a>
-        </p>
-         <p>
-            <a href="https://docs.google.com/presentation/d/1KM8KQvnGhYZDPfOE4y6reChhY_qWbEMc/edit?usp=drivesdk&ouid=102555709869386963762&rtpof=true&sd=true" target="_blank">Sale kit </a>
-        </p>
-    </div>
+<h2 class="tool-header">CÔNG CỤ & CHƯƠNG TRÌNH</h2>
+<div class="tool-grid">
+    <a href="https://docs.google.com/document/d/1J-_ur9Zdh5ZbC8nVJ824VD7Oms9UUGfg/edit?usp=drivesdk&ouid=102555709869386963762&rtpof=true&sd=true"
+       target="_blank" class="tool-card">
+        <div class="icon">📑</div>
+        <div class="title">Chương trình đã ký</div>
+    </a>
+    <a href="https://docs.google.com/forms/d/e/1FAIpQLSepyICT5JqfHzXzeBvz5KjVc2gAuTJZR4h4hwLjMvbBtJ97Ng/viewform"
+       target="_blank" class="tool-card">
+        <div class="icon">📝</div>
+        <div class="title">Form đăng ký khám</div>
+    </a>
+    <a href="https://docs.google.com/presentation/d/1KM8KQvnGhYZDPfOE4y6reChhY_qWbEMc/edit?usp=drivesdk&ouid=102555709869386963762&rtpof=true&sd=true"
+       target="_blank" class="tool-card">
+        <div class="icon">🎁</div>
+        <div class="title">Sale kit</div>
+    </a>
 </div>
+
 
 <!-- Footer -->
 <footer>
