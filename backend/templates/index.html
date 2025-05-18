@@ -7,15 +7,18 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
     <style>
-        /* Giao diện mặc định cho desktop */
+       
+/* Chỉ sử dụng phần CSS cho ảnh nền */
 body {
-    background: #3b2f2f; /* nâu socola đậm */
-    color: #d9cbb6; /* nâu kem nhạt */
+    background: url("{{ url_for('static', filename='backgr.jpg') }}") no-repeat center center fixed; /* ảnh nền */
+    background-size: cover; /* Đảm bảo ảnh phủ hết nền */
+    color: #d9cbb6;
     font-family: 'Inter', sans-serif;
     margin: 0;
     padding: 20px;
     min-height: 100vh;
 }
+
 
 .container {
     max-width: 1200px;
