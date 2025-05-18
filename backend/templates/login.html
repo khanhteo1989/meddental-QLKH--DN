@@ -25,15 +25,28 @@
             box-shadow: 0 0 40px rgba(139, 111, 94, 0.8); /* bóng nâu sáng */
         }
 
-        h1 {
-            font-weight: 900;
-            font-size: 2.8rem;
-            color: #d2bba4;
-            margin-bottom: 30px;
-            text-align: center;
-            letter-spacing: 1.8px;
-            text-shadow: 0 0 12px #b29373;
-        }
+       h1 {
+    font-weight: 900;
+    font-size: 2.8rem;
+    color: #d2bba4;
+    margin-bottom: 30px;
+    text-align: center;
+    letter-spacing: 1.8px;
+    text-shadow: 0 0 12px #b29373;
+
+    /* Thêm các dòng dưới để căn chỉnh logo + text */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+}
+
+h1 .logo {
+    width: 40px;
+    height: 40px;
+    object-fit: contain;
+}
+
 
         .form-group label {
             font-weight: 700;
@@ -104,7 +117,11 @@
 </head>
 <body>
     <div class="container">
-        <h1>Đăng Nhập</h1>
+        <h1>
+  <img src="{{ url_for('static', filename='image/logo2.png') }}" alt="Logo" class="logo">
+  CRM-MEDDENTAL
+</h1>
+
 
         <form action="{{ url_for('login') }}" method="POST">
             <div class="form-group">
