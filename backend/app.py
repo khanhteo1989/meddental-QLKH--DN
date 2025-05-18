@@ -8,6 +8,9 @@ from datetime import datetime
 from werkzeug.security import generate_password_hash, check_password_hash
 import random
 import string
+from flask import send_file
+import openpyxl
+from io import BytesIO
 
 def generate_unique_code():
     while True:
@@ -26,6 +29,16 @@ CV_CODES = [
     "CV09 - Tiến Cường", "CV010 - Hoàng Thân", "CV011 - Trang(Teamlinh)", 
     "CV12 - Quảng Ninh1", "CV013 - Quảng Ninh2"
 ]
+
+# Danh sách email có quyền admin (chỉnh sửa, xóa, thêm)
+admin_emails = {
+    'khanhlb@meddental.vn',
+    # Thêm email admin khác nếu muốn
+}
+
+# Hàm kiểm tra quyền admin
+def is_admin():
+    return current_user.is_authenticated and current_user.email in admin_emails
 
 # Cài đặt Flask-Login
 login_manager = login_manager.LoginManager()
@@ -70,6 +83,44 @@ class Customer(db.Model):
 with app.app_context():
     db.create_all()
 
+@app.route('/download_customers', methods=['GET'])
+@login_required
+def download_customers():
+    search_query = request.args.get('search', '', type=str)
+    
+    if search_query:
+        customers = Customer.query.filter(Customer.phone.like(f'%{search_query}%')).all()
+    else:
+        customers = Customer.query.all()
+
+    wb = openpyxl.Workbook()
+    sheet = wb.active
+    sheet.title = "Danh Sách Khách Hàng"
+
+    columns = ['Họ Tên', 'SĐT', 'Địa Chỉ', 'Gắn Mã CV', 'CT Áp Dụng', 'Ngày Sinh', 'Mã KH', 'Tình Trạng', 'Ghi Chú']
+    sheet.append(columns)
+
+    for customer in customers:
+        row = [
+            customer.name,
+            customer.phone,
+            customer.address,
+            customer.role,
+            customer.status,
+            customer.dob,
+            customer.cccd,
+            customer.program,
+            customer.notes
+        ]
+        sheet.append(row)
+
+    file_stream = BytesIO()
+    wb.save(file_stream)
+    file_stream.seek(0)
+
+    return send_file(file_stream, as_attachment=True, download_name="customers.xlsx", mimetype="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+
+
 # Đăng nhập route
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -92,21 +143,16 @@ def register():
         email = request.form['email']
         password = request.form['password']
         
-        # Kiểm tra email có đuôi @meddental.vn
         if not email.endswith('@meddental.vn'):
             flash('Bạn Không Phải Nhân Viên Meddental!!!!', 'danger')
             return redirect(url_for('register'))
         
-        # Kiểm tra xem email đã tồn tại chưa
         existing_user = User.query.filter_by(email=email).first()
         if existing_user:
             flash('Email đã được đăng ký, vui lòng chọn email khác!', 'danger')
             return redirect(url_for('register'))
         
-        # Mã hóa mật khẩu với phương thức pbkdf2:sha256
         hashed_password = generate_password_hash(password, method='pbkdf2:sha256')
-        
-        # Tạo người dùng mới
         user = User(email=email, password=hashed_password)
         db.session.add(user)
         db.session.commit()
@@ -116,17 +162,15 @@ def register():
     
     return render_template('register.html')
 
-# Route cho quên mật khẩu
+# Quên mật khẩu
 @app.route('/forgot_password', methods=['GET', 'POST'])
 def forgot_password():
     if request.method == 'POST':
         email = request.form['email']
         employee_id = request.form['employee_id']
 
-        # Kiểm tra email và mã số nhân viên
         user = User.query.filter_by(email=email).first()
         if user and user.email == email:
-            # Send email to reset password or generate a temporary password (just an example)
             flash('Đặt lại mật khẩu thành công. Kiểm tra email để nhận hướng dẫn!', 'success')
             return redirect(url_for('login'))
         else:
@@ -134,7 +178,7 @@ def forgot_password():
             return redirect(url_for('forgot_password'))
     return render_template('forgot_password.html')
 
-# Route cho đổi mật khẩu
+# Đổi mật khẩu
 @app.route('/change_password', methods=['GET', 'POST'])
 @login_required
 def change_password():
@@ -142,7 +186,7 @@ def change_password():
         current_password = request.form['current_password']
         new_password = request.form['new_password']
         
-        user = current_user  # Lấy người dùng hiện tại
+        user = current_user
         if check_password_hash(user.password, current_password):
             user.password = generate_password_hash(new_password, method='pbkdf2:sha256')
             db.session.commit()
@@ -161,16 +205,14 @@ def logout():
     logout_user()
     return redirect(url_for('login'))
 
-# Đảm bảo rằng người dùng đã đăng nhập mới có thể truy cập các trang sau
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(int(user_id))
 
-# Route trang chủ, chỉ cho phép người đã đăng nhập
 @app.route('/')
 @login_required
 def home():
-    search_query = request.args.get('search', '', type=str)  # Lấy từ tham số tìm kiếm trong URL
+    search_query = request.args.get('search', '', type=str)
     page = request.args.get('page', 1, type=int)
     
     if search_query:
@@ -178,17 +220,21 @@ def home():
     else:
         customers = Customer.query.order_by(Customer.date_added.desc()).paginate(page=page, per_page=20)
     
-    return render_template('index.html', customers=customers, cv_codes=CV_CODES, datetime=datetime)
+    return render_template('index.html', customers=customers, cv_codes=CV_CODES, datetime=datetime, admin_emails=admin_emails)
 
-# Route thêm khách hàng
 @app.route('/add_customer', methods=['POST'])
+@login_required
 def add_customer():
+    # BỎ kiểm tra is_admin() ở đây, mọi user được thêm khách
+    form_data = {
+        # ...
+    }
     form_data = {
         'name': request.form['name'],
         'phone': request.form['phone'],
         'address': request.form['address'],
         'dob': request.form['dob'],
-        'cccd': generate_unique_code(),  # Mã CCCD được tự động sinh
+        'cccd': generate_unique_code(),
         'role': request.form['cv_code'],
         'status': request.form['status'],
         'program': request.form['program'],
@@ -210,9 +256,13 @@ def add_customer():
     db.session.commit()
     return redirect(url_for('home'))
 
-# Route sửa thông tin khách hàng
 @app.route('/edit_customer/<int:customer_id>', methods=['GET', 'POST'])
+@login_required
 def edit_customer(customer_id):
+    if not is_admin():
+        flash('Bạn không có quyền chỉnh sửa khách hàng!', 'danger')
+        return redirect(url_for('home'))
+
     customer = Customer.query.get_or_404(customer_id)
     treatment_plans = customer.treatment_plans.split(',') if customer.treatment_plans else []
     appointment_schedules = customer.appointment_schedules.split(',') if customer.appointment_schedules else []
@@ -241,8 +291,8 @@ def edit_customer(customer_id):
                            appointment_schedules=appointment_schedules,
                            revenues=revenues)
 
-# Route xem chi tiết khách hàng
 @app.route('/customer/<int:customer_id>')
+@login_required
 def view_customer(customer_id):
     customer = Customer.query.get_or_404(customer_id)
     treatment_plans = customer.treatment_plans.split(',') if customer.treatment_plans else []
@@ -253,13 +303,16 @@ def view_customer(customer_id):
                            appointment_schedules=appointment_schedules,
                            revenues=revenues)
 
-# Route xóa khách hàng
 @app.route('/delete_customer/<int:customer_id>')
+@login_required
 def delete_customer(customer_id):
+    if not is_admin():
+        flash('Bạn không có quyền xóa khách hàng!', 'danger')
+        return redirect(url_for('home'))
+
     customer = Customer.query.get_or_404(customer_id)
     from datetime import datetime, timedelta
     now = datetime.utcnow()
-    # Chỉ cho phép xóa trong vòng 24 giờ
     if (now - customer.date_added) > timedelta(hours=24):
         flash('Không thể xóa khách hàng sau 24 giờ', 'warning')
         return redirect(url_for('home'))
@@ -268,15 +321,22 @@ def delete_customer(customer_id):
     flash('Khách hàng đã bị xóa', 'success')
     return redirect(url_for('home'))
 
-# Route upload file khách hàng
+
 @app.route('/upload', methods=['GET', 'POST'])
+@login_required
 def upload_file():
+    if not is_admin():
+        flash('Bạn không có quyền upload file!', 'danger')
+        return redirect(url_for('home'))
+
     if not os.path.exists(app.config['UPLOAD_FOLDER']):
         os.makedirs(app.config['UPLOAD_FOLDER'])
 
     if request.method == 'POST':
         if 'file' not in request.files:
-            return 'No file part'
+            flash('Không có file để upload', 'danger')
+            return redirect(url_for('upload_file'))
+
         file = request.files['file']
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
@@ -287,7 +347,7 @@ def upload_file():
                     name=row['Họ Tên'],
                     address=row['Địa Chỉ'],
                     phone=row['SĐT'],
-                    cccd=generate_unique_code(),  # Tạo mã khách hàng ngẫu nhiên
+                    cccd=generate_unique_code(),
                     dob=row['Ngày Sinh'],
                     role=row['CV Quản Lý'],
                     status=row['Tình Trạng'],
