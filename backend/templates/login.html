@@ -7,7 +7,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
     <style>
         body {
-            background: #3b2f2f; /* nâu socola đậm */
+            background: url("{{ url_for('static', filename='image/backgr.jpg') }}") no-repeat center center fixed;
+            background-size: cover;
             color: #d9cbb6; /* nâu kem nhạt */
             font-family: 'Inter', sans-serif;
             margin: 0;
@@ -18,10 +19,10 @@
         .container {
             max-width: 600px;
             margin: 0 auto;
-            background: #5a463acc; /* nâu nhạt trong suốt */
+            background: rgba(90, 70, 58, 0.8); /* nâu nhạt trong suốt */
             border-radius: 20px;
             padding: 30px;
-            box-shadow: 0 0 40px #8b6f5ecc; /* bóng nâu sáng */
+            box-shadow: 0 0 40px rgba(139, 111, 94, 0.8); /* bóng nâu sáng */
         }
 
         h1 {
