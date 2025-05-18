@@ -151,3 +151,4 @@ zipp==3.20.2
 gunicorn==20.1.0
 flask-login
 psycopg2-binary
+openpyxl
