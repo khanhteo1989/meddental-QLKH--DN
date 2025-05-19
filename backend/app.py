@@ -285,11 +285,11 @@ def delete_customer(customer_id):
 
     customer = Customer.query.get_or_404(customer_id)
     now = datetime.utcnow()
-    # Nếu là admin (email trong admin_emails) thì không giới hạn thời gian xóa
-if not is_admin():
-    if (now - customer.date_added) > timedelta(hours=24):
-        flash('Không thể xóa khách hàng sau 24 giờ', 'warning')
-        return redirect(url_for('home'))
+    # Nếu không phải admin, kiểm tra thời gian tạo
+    if not is_admin():
+        if (now - customer.date_added) > timedelta(hours=24):
+            flash('Không thể xóa khách hàng sau 24 giờ', 'warning')
+            return redirect(url_for('home'))
 
     db.session.delete(customer)
     db.session.commit()
