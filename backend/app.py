@@ -1,28 +1,22 @@
-from flask import Flask, render_template, request, redirect, url_for, flash, session
+from flask import Flask, render_template, request, redirect, url_for, flash, session, send_file
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.utils import secure_filename
-from flask_login import UserMixin, login_user, login_required, logout_user, login_manager, current_user
+from flask_login import UserMixin, login_user, login_required, logout_user, LoginManager, current_user
 import os
 import pandas as pd
-from datetime import datetime
+from datetime import datetime, timedelta
 from werkzeug.security import generate_password_hash, check_password_hash
 import random
 import string
-from flask import send_file
 import openpyxl
 from io import BytesIO
 
 def generate_unique_code():
     while True:
-        # Tạo mã ngẫu nhiên có định dạng "DN-xxxxxxxxx"
         code = 'DN-' + ''.join(random.choices(string.digits, k=9))
-        
-        # Kiểm tra xem mã này đã tồn tại trong cơ sở dữ liệu chưa
         if not Customer.query.filter_by(cccd=code).first():
             return code
 
-
-# Dữ liệu về mã CV
 CV_CODES = [
     "CV01 - KHÁNH", "CV02 - X.Thủy", "CV03 - Ngọc Anh", "CV04 - Nhật Linh",
     "CV05 - Hoàng Biên", "CV06 - Hải", "CV07 - Hoàng Trang", "CV08 - Ly",
@@ -30,31 +24,26 @@ CV_CODES = [
     "CV12 - Quảng Ninh1", "CV013 - Quảng Ninh2"
 ]
 
-# Danh sách email có quyền admin (chỉnh sửa, xóa, thêm)
 admin_emails = {
     'khanhlb@meddental.vn',
-    # Thêm email admin khác nếu muốn
 }
 
-# Hàm kiểm tra quyền admin
 def is_admin():
     return current_user.is_authenticated and current_user.email in admin_emails
-
-# Cài đặt Flask-Login
-login_manager = login_manager.LoginManager()
-login_manager.login_view = 'login'
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://neondb_owner:npg_KcInu5GkdZ1S@ep-delicate-queen-a1ffwyhq-pooler.ap-southeast-1.aws.neon.tech/neondb?sslmode=require'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['UPLOAD_FOLDER'] = 'uploads'
 app.config['ALLOWED_EXTENSIONS'] = {'xls', 'xlsx'}
-app.config['SECRET_KEY'] = 'mysecretkey'  
+app.config['SECRET_KEY'] = 'mysecretkey'
 
 db = SQLAlchemy(app)
+
+login_manager = LoginManager()
+login_manager.login_view = 'login'
 login_manager.init_app(app)
 
-# Model User cho đăng nhập
 class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(100), unique=True, nullable=False)
@@ -63,7 +52,6 @@ class User(UserMixin, db.Model):
     def __repr__(self):
         return f'<User {self.email}>'
 
-# Model Customer cho quản lý khách hàng
 class Customer(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False)
@@ -83,11 +71,17 @@ class Customer(db.Model):
 with app.app_context():
     db.create_all()
 
+@login_manager.user_loader
+def load_user(user_id):
+    return User.query.get(int(user_id))
+
+def allowed_file(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in app.config['ALLOWED_EXTENSIONS']
+
 @app.route('/download_customers', methods=['GET'])
 @login_required
 def download_customers():
     search_query = request.args.get('search', '', type=str)
-    
     if search_query:
         customers = Customer.query.filter(Customer.phone.like(f'%{search_query}%')).all()
     else:
@@ -117,18 +111,15 @@ def download_customers():
     file_stream = BytesIO()
     wb.save(file_stream)
     file_stream.seek(0)
+    return send_file(file_stream, as_attachment=True, download_name="customers.xlsx",
+                     mimetype="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
 
-    return send_file(file_stream, as_attachment=True, download_name="customers.xlsx", mimetype="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
-
-
-# Đăng nhập route
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
         email = request.form['email']
         password = request.form['password']
         user = User.query.filter_by(email=email).first()
-        
         if user and check_password_hash(user.password, password):
             login_user(user)
             return redirect(url_for('home'))
@@ -136,33 +127,31 @@ def login():
             flash('Invalid credentials, try again.', 'danger')
     return render_template('login.html')
 
-# Đăng ký route
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     if request.method == 'POST':
         email = request.form['email']
         password = request.form['password']
-        
+
         if not email.endswith('@meddental.vn'):
             flash('Bạn Không Phải Nhân Viên Meddental!!!!', 'danger')
             return redirect(url_for('register'))
-        
+
         existing_user = User.query.filter_by(email=email).first()
         if existing_user:
             flash('Email đã được đăng ký, vui lòng chọn email khác!', 'danger')
             return redirect(url_for('register'))
-        
+
         hashed_password = generate_password_hash(password, method='pbkdf2:sha256')
         user = User(email=email, password=hashed_password)
         db.session.add(user)
         db.session.commit()
-        
+
         flash('Tài khoản đã được tạo thành công!', 'success')
         return redirect(url_for('login'))
-    
+
     return render_template('register.html')
 
-# Quên mật khẩu
 @app.route('/forgot_password', methods=['GET', 'POST'])
 def forgot_password():
     if request.method == 'POST':
@@ -178,14 +167,13 @@ def forgot_password():
             return redirect(url_for('forgot_password'))
     return render_template('forgot_password.html')
 
-# Đổi mật khẩu
 @app.route('/change_password', methods=['GET', 'POST'])
 @login_required
 def change_password():
     if request.method == 'POST':
         current_password = request.form['current_password']
         new_password = request.form['new_password']
-        
+
         user = current_user
         if check_password_hash(user.password, current_password):
             user.password = generate_password_hash(new_password, method='pbkdf2:sha256')
@@ -194,41 +182,29 @@ def change_password():
             return redirect(url_for('home'))
         else:
             flash('Mật khẩu hiện tại không đúng!', 'danger')
-    
+
     return render_template('change_password.html')
 
-
-# Đăng xuất route
 @app.route('/logout')
 @login_required
 def logout():
     logout_user()
     return redirect(url_for('login'))
 
-@login_manager.user_loader
-def load_user(user_id):
-    return User.query.get(int(user_id))
-
 @app.route('/')
 @login_required
 def home():
     search_query = request.args.get('search', '', type=str)
     page = request.args.get('page', 1, type=int)
-    
     if search_query:
         customers = Customer.query.filter(Customer.phone.like(f'%{search_query}%')).paginate(page=page, per_page=20)
     else:
         customers = Customer.query.order_by(Customer.date_added.desc()).paginate(page=page, per_page=20)
-    
     return render_template('index.html', customers=customers, cv_codes=CV_CODES, datetime=datetime, admin_emails=admin_emails)
 
 @app.route('/add_customer', methods=['POST'])
 @login_required
 def add_customer():
-    # BỎ kiểm tra is_admin() ở đây, mọi user được thêm khách
-    form_data = {
-        # ...
-    }
     form_data = {
         'name': request.form['name'],
         'phone': request.form['phone'],
@@ -259,7 +235,7 @@ def add_customer():
 @app.route('/edit_customer/<int:customer_id>', methods=['GET', 'POST'])
 @login_required
 def edit_customer(customer_id):
-    # Bỏ kiểm tra is_admin(), cho phép tất cả user đã login được edit
+    # MỞ KHÓA CHO TẤT CẢ USER ĐĂNG NHẬP ĐƯỢC CHỈNH SỬA
     customer = Customer.query.get_or_404(customer_id)
     treatment_plans = customer.treatment_plans.split(',') if customer.treatment_plans else []
     appointment_schedules = customer.appointment_schedules.split(',') if customer.appointment_schedules else []
@@ -308,7 +284,6 @@ def delete_customer(customer_id):
         return redirect(url_for('home'))
 
     customer = Customer.query.get_or_404(customer_id)
-    from datetime import datetime, timedelta
     now = datetime.utcnow()
     if (now - customer.date_added) > timedelta(hours=24):
         flash('Không thể xóa khách hàng sau 24 giờ', 'warning')
@@ -317,7 +292,6 @@ def delete_customer(customer_id):
     db.session.commit()
     flash('Khách hàng đã bị xóa', 'success')
     return redirect(url_for('home'))
-
 
 @app.route('/upload', methods=['GET', 'POST'])
 @login_required
@@ -360,9 +334,6 @@ def upload_file():
             return render_template('upload.html', customers=customers)
 
     return render_template('upload.html')
-
-def allowed_file(filename):
-    return '.' in filename and filename.rsplit('.', 1)[1].lower() in app.config['ALLOWED_EXTENSIONS']
 
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5001))
