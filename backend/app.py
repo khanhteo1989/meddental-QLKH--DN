@@ -259,10 +259,7 @@ def add_customer():
 @app.route('/edit_customer/<int:customer_id>', methods=['GET', 'POST'])
 @login_required
 def edit_customer(customer_id):
-    if not is_admin():
-        flash('Bạn không có quyền chỉnh sửa khách hàng!', 'danger')
-        return redirect(url_for('home'))
-
+    # Bỏ kiểm tra is_admin(), cho phép tất cả user đã login được edit
     customer = Customer.query.get_or_404(customer_id)
     treatment_plans = customer.treatment_plans.split(',') if customer.treatment_plans else []
     appointment_schedules = customer.appointment_schedules.split(',') if customer.appointment_schedules else []
